@@ -14,6 +14,7 @@ class MainActivity : FlowActivity() {
         return R.id.fl_main_container_activity_main
     }
 
+    private var mCurrentUser: User? = null
     private lateinit var mMainFlow: AndroidFlow
 
     private lateinit var bnvMainNavigation: BottomNavigationView
@@ -25,6 +26,7 @@ class MainActivity : FlowActivity() {
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
 
         this.mMainFlow = MainFlow(this.application)
+        this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
         registerFlow(mMainFlow)
         launchFlow(mMainFlow)
@@ -35,9 +37,8 @@ class MainActivity : FlowActivity() {
     }
 
     private fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        val user = intent.getParcelableExtra<User>(User.EXTRA_USER)
         val bundle = Bundle()
-        bundle.putString(User.EXTRA_USERNAME, user.userName)
+        bundle.putString(User.EXTRA_USERNAME, mCurrentUser?.userName)
         executeFlow(mMainFlow, menuItem.title.toString(), bundle)
         return true
     }

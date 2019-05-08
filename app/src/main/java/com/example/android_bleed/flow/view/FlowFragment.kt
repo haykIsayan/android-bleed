@@ -12,6 +12,9 @@ abstract class FlowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val bundle = arguments ?: Bundle()
+        (activity as FlowActivity).notifyFlowStepCompleted(bundle, bundle.getString("TAG")!!)
     }
 
     override fun onCreateView(
@@ -31,9 +34,6 @@ abstract class FlowFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        val bundle = arguments ?: Bundle()
-        (activity as FlowActivity).notifyFlowStepCompleted(bundle, bundle.getString("TAG")!!)
 
     }
 

@@ -140,6 +140,7 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
 //            fragmentManager.popBackStack(fragmentPopResource.fragmentKlass.java.name)
         }
         fragmentManager.popBackStack()
+        notifyFlowStepCompleted(fragmentPopResource.bundle, fragmentPopResource.flowName)
     }
 
     private fun executeFlowLaunch(flowLauncherResource: FlowLauncher.FlowLauncherResource<*>) {

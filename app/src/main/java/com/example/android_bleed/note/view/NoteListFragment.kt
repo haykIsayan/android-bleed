@@ -26,9 +26,6 @@ class NoteListFragment : FlowFragment() {
 
     private lateinit var mNoteListFlow: AndroidFlow
 
-    private lateinit var etNoteText: EditText
-    private lateinit var etNoteTitle: EditText
-
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var rvNoteList: RecyclerView
 
@@ -60,7 +57,6 @@ class NoteListFragment : FlowFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.mNoteListFlow = getFlowByName(NoteListFlow::class.java.name)?:return
-//        registerFlow(mNoteListFlow)
     }
 
     override fun onCreateView(

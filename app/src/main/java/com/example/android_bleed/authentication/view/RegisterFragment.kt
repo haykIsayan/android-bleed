@@ -88,14 +88,23 @@ class RegisterFragment : FlowFragment() {
 
     }
 
-
     private fun register() {
+        val userName = etUsername.text.toString()
+        val firstName = etFirstname.text.toString()
+        val lastName = etLastname.text.toString()
+        val password = etPassword.text.toString()
+
+        if (userName.isEmpty() || firstName.isEmpty()
+            || lastName.isEmpty() || password.isEmpty()) {
+            Toast.makeText(activity, "Please provide fill out all fields", Toast.LENGTH_LONG).show()
+            return
+        }
 
         val user = User(
-            userName = etUsername.text.toString(),
-            firstName = etFirstname.text.toString(),
-            lastName = etLastname.text.toString(),
-            password = etPassword.text.toString()
+            userName = userName,
+            firstName = firstName,
+            lastName = lastName,
+            password = password
         )
 
         val bundle = Bundle()

@@ -3,6 +3,7 @@ package com.example.android_bleed.note.domain
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android_bleed.authentication.AuthUtilities
 import com.example.android_bleed.data.repositories.NoteRepository
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.flow.FlowResource
@@ -18,7 +19,7 @@ class GetNoteListAction : UserAction.UserApplicationAction() {
 
             val noteRepository = NoteRepository(application)
 
-            val noteList = noteRepository.getNotesByAuthorUsername("HaykIsayan98")
+            val noteList = noteRepository.getNotesByAuthorUsername(AuthUtilities.sCurrentUser!!.userName)
             if (noteList != null && !noteList.isEmpty()) {
                 val flowResource = FlowResource(status = FlowResource.Status.COMPLETED)
                 val noteArrayList = arrayListOf<Note>()
