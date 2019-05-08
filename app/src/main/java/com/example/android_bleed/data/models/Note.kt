@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "NoteTable")
 class Note (
     @PrimaryKey(autoGenerate = true)
-    val noteId: Int = -1,
+    var noteId: Int?,
     @ColumnInfo(name = "author_name")
     val authorUsername: String,
     @ColumnInfo(name = "title")
@@ -27,7 +27,7 @@ class Note (
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(noteId)
+        parcel.writeInt(noteId!!)
         parcel.writeString(authorUsername)
         parcel.writeString(title)
         parcel.writeString(text)
@@ -40,6 +40,8 @@ class Note (
     companion object CREATOR : Parcelable.Creator<Note> {
         const val EXTRA_NOTE = "Extra.Note"
         const val EXTRA_NOTE_LIST = "Extra.Note.List"
+        const val EXTRA_NOTE_TITLE = "Extra.Note.Title"
+        const val EXTRA_NOTE_TEXT = "Extra.Note.Text"
 
         override fun createFromParcel(parcel: Parcel): Note {
             return Note(parcel)

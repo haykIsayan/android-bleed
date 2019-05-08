@@ -9,9 +9,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name="com.example.android_bleed.main.view.NoteListActivity">
+        <activity android:name=".main.MainActivity">
         </activity>
-        <activity android:name="com.example.android_bleed.authentication.view.AuthActivity">
+        <activity android:name=".note.view.NoteListActivity">
+        </activity>
+        <activity android:name=".authentication.view.AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -3,6 +3,7 @@ package com.example.android_bleed.flow
 import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.example.android_bleed.flow.flowsteps.*
 import com.example.android_bleed.flow.view.FlowActivity
@@ -11,13 +12,19 @@ import kotlin.reflect.KClass
 
 abstract class AndroidFlow (val mApplication: Application){
 
+    private val mFlowName = this::class.java.name
     private lateinit var mFlowGraph: FlowGraph
     private lateinit var mCurrentVectorIterator: FlowVectorIterator
 
     private var mFlowData = MediatorLiveData<FlowResource>()
 
 
-    companion object { const val ACTION_LAUNCH_FLOW = "Action.Launch.Flow" }
+    companion object {
+        const val ACTION_LAUNCH_FLOW = "Action.Launch.Flow" }
+
+    init {
+        onCreateFlow()
+    }
 
     private fun onCreateFlow() {
         mFlowGraph = onCreateFlowGraph()
@@ -25,13 +32,11 @@ abstract class AndroidFlow (val mApplication: Application){
 
     protected abstract fun onCreateFlowGraph(): FlowGraph
 
-
     /**
      * Main Controller Functions
      */
 
     fun launch(bundle: Bundle = Bundle()) {
-        onCreateFlow()
         val flowVector = mFlowGraph.getFlowVector(ACTION_LAUNCH_FLOW)?:return
         invokeFlowVector(flowVector, bundle)
     }
@@ -45,7 +50,7 @@ abstract class AndroidFlow (val mApplication: Application){
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * //////////////////////////////////////// UTILITY FUNCTIONS //////////////////////////////////////////////////////
+     * ////////////////////////////////////////// UTILITY FUNCTIONS ////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +65,7 @@ abstract class AndroidFlow (val mApplication: Application){
      * Notify that the last flow step has completed its task and
      * that the iterator must continue on with flow step execution
      */
+
     fun notifyFlowStepCompleted(bundle: Bundle) {
         executeVectorIterator(bundle)
     }
@@ -73,20 +79,19 @@ abstract class AndroidFlow (val mApplication: Application){
         }
         mFlowData.apply {
             addSource(flowStepData) {
+                it.flowName = mFlowName
                 value = it
             }
         }
     }
 
-
-    fun getFlowData() = mFlowData
-
+    fun getFlowData(): LiveData<FlowResource> = mFlowData
 
     /**
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * Utility Classes
+     * //////////////////////////////////////// Utility Classes ////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,9 +113,6 @@ abstract class AndroidFlow (val mApplication: Application){
 
     inner class FlowVector {
         private val mFlowStepList = mutableListOf<FlowStep>()
-
-
-        //todo stack control
 
 
         fun <A : FlowActivity> startActivity(activityKlass: KClass<A>) = apply {
@@ -135,6 +137,11 @@ abstract class AndroidFlow (val mApplication: Application){
             apply {
                 this.mFlowStepList.add(FragmentPop(fragmentKlass))
             }
+
+        fun <F : AndroidFlow> launchFlow(flowKlass: KClass<F>) =
+                apply {
+                    this.mFlowStepList.add(FlowLauncher(flowKlass = flowKlass))
+                }
 
 
         fun getStepList() = this.mFlowStepList

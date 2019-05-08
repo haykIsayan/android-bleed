@@ -1,8 +1,8 @@
-package com.example.android_bleed.main.view
+package com.example.android_bleed.note.view
 
 import android.os.Bundle
 import com.example.android_bleed.R
-import com.example.android_bleed.main.MainFlow
+import com.example.android_bleed.note.NoteListFlow
 import com.example.android_bleed.flow.view.FlowActivity
 
 class NoteListActivity : FlowActivity() {
@@ -13,7 +13,7 @@ class NoteListActivity : FlowActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_list)
 
-        launchFlow(MainFlow(application))
+        launchFlow(NoteListFlow(application))
 
     }
 

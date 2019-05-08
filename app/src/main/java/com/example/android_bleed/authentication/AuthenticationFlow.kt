@@ -5,8 +5,8 @@ import com.example.android_bleed.flow.AndroidFlow
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
-import com.example.android_bleed.main.view.NoteListActivity
 import com.example.android_bleed.authentication.view.RegisterFragment
+import com.example.android_bleed.main.MainActivity
 
 class AuthenticationFlow(application: Application): AndroidFlow(application) {
 
@@ -21,12 +21,12 @@ class AuthenticationFlow(application: Application): AndroidFlow(application) {
             .addFlowVector(
                 ACTION_LOGIN, FlowVector()
                 .execute(LoginAction())
-                .startActivity(NoteListActivity::class))
+                .startActivity(MainActivity::class))
 
             .addFlowVector(
                 ACTION_REGISTER, FlowVector()
                 .execute(RegisterAction())
-                .startActivity(NoteListActivity::class)
+                .startActivity(MainActivity::class)
             )
 
             .addFlowVector(

@@ -1,4 +1,4 @@
-package com.example.android_bleed.main.view
+package com.example.android_bleed.note.view
 
 import android.view.LayoutInflater
 import android.view.View
