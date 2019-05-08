@@ -8,7 +8,10 @@ import com.example.android_bleed.flow.view.FlowActivity
 import com.example.android_bleed.flow.view.FlowFragment
 import kotlin.reflect.KClass
 
-open class FlowResource (val status: Status = Status.PENDING, var bundle: Bundle = Bundle(), val application: Application? = null){
+open class FlowResource (val status: Status = Status.PENDING,
+                         var bundle: Bundle = Bundle(),
+                         val application: Application? = null,
+                         var flowName: String = ""){
 
     companion object {
         fun fail(failMessage: String = "") = FailResource(failMessage)

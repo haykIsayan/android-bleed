@@ -20,7 +20,7 @@ class SaveNoteAction : UserAction.UserApplicationAction() {
             repository.createNote(note)
 
             val registerResource = FlowResource(FlowResource.Status.COMPLETED)
-            registerResource.bundle.putParcelable(User.EXTRA_USER, note)
+            registerResource.bundle.putParcelable(Note.EXTRA_NOTE, note)
 
             data.postValue(registerResource)
 

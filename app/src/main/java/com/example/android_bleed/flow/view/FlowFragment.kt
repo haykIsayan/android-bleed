@@ -33,20 +33,25 @@ abstract class FlowFragment : Fragment() {
         super.onResume()
 
         val bundle = arguments ?: Bundle()
-        (activity as FlowActivity).notifyFlowStepCompleted(bundle)
+        (activity as FlowActivity).notifyFlowStepCompleted(bundle, bundle.getString("TAG")!!)
 
+    }
+
+    fun registerFlow(flow: AndroidFlow) {
+        (activity as FlowActivity).registerFlow(flow)
     }
 
     fun launchFlow(flow: AndroidFlow, bundle: Bundle = Bundle()) {
         (activity as FlowActivity).launchFlow(flow)
     }
 
-    fun executeFlow(vectorTag: String, bundle: Bundle = Bundle()) {
-        (activity as FlowActivity).executeFlow(vectorTag, bundle)
+    fun executeFlow(flow: AndroidFlow, vectorTag: String, bundle: Bundle = Bundle()) {
+        (activity as FlowActivity).executeFlow(flow, vectorTag, bundle)
     }
 
     fun getFlowData() = (activity as FlowActivity).getFlowData()
 
+    fun getFlowByName(flowName: String) = (activity as FlowActivity).getFlowByName(flowName)
     abstract fun getLayoutResource(): Int
 
 }

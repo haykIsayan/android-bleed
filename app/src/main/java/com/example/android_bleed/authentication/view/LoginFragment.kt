@@ -23,6 +23,8 @@ class LoginFragment : FlowFragment() {
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
 
+    private lateinit var mAuthenticationFlow: AuthenticationFlow
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +45,12 @@ class LoginFragment : FlowFragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mAuthenticationFlow = (activity as AuthActivity).getAuthFlow()
+//        registerFlow(mAuthenticationFlow)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,13 +68,14 @@ class LoginFragment : FlowFragment() {
             bundle.putString(User.EXTRA_PASSWORD, etPassword.text.toString())
 
             executeFlow(
+                flow = mAuthenticationFlow,
                 vectorTag = AuthenticationFlow.ACTION_LOGIN,
                 bundle = bundle
             )
         }
 
         btnRegister.setOnClickListener {
-            executeFlow(AuthenticationFlow.ACTION_GOTO_REGISTER)
+            executeFlow(mAuthenticationFlow, AuthenticationFlow.ACTION_GOTO_REGISTER)
         }
 
     }

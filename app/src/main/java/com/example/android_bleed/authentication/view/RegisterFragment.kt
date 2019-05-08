@@ -1,5 +1,7 @@
 package com.example.android_bleed.authentication.view
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import android.text.LoginFilter
 import android.util.Log
@@ -30,6 +32,8 @@ class RegisterFragment : FlowFragment() {
     private lateinit var btnRegister: Button
     private lateinit var btnLogin: Button
 
+    private lateinit var mAuthenticationFlow: AuthenticationFlow
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,6 +60,13 @@ class RegisterFragment : FlowFragment() {
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mAuthenticationFlow = (activity as AuthActivity).getAuthFlow()
+//        registerFlow(mAuthenticationFlow)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,21 +79,11 @@ class RegisterFragment : FlowFragment() {
         btnLogin = view.findViewById(R.id.btn_login_fragment_register)
 
         btnRegister.setOnClickListener {
-
-            val user = User(
-                userName = etUsername.text.toString(),
-                firstName = etFirstname.text.toString(),
-                lastName = etLastname.text.toString(),
-                password = etPassword.text.toString()
-            )
-
-            val bundle = Bundle()
-            bundle.putParcelable(User.EXTRA_USER, user)
-            executeFlow(AuthenticationFlow.ACTION_REGISTER, bundle)
+            register()
         }
 
         btnLogin.setOnClickListener {
-            executeFlow(AuthenticationFlow.ACTION_GOTO_LOGIN)
+            executeFlow(mAuthenticationFlow, AuthenticationFlow.ACTION_GOTO_LOGIN)
         }
 
     }
@@ -99,7 +100,7 @@ class RegisterFragment : FlowFragment() {
 
         val bundle = Bundle()
         bundle.putParcelable(User.EXTRA_USER, user)
-        executeFlow(AuthenticationFlow.ACTION_REGISTER, bundle)
+        executeFlow(mAuthenticationFlow, AuthenticationFlow.ACTION_REGISTER, bundle)
     }
 
 }
