@@ -1,6 +1,7 @@
 package com.example.android_bleed.editing
 
 import android.app.Application
+import com.example.android_bleed.editing.domain.EditNoteAction
 import com.example.android_bleed.editing.domain.SaveNoteAction
 import com.example.android_bleed.editing.view.CreateNoteFragment
 import com.example.android_bleed.flow.AndroidFlow
@@ -18,7 +19,7 @@ class CreateNoteFlow (application: Application) : AndroidFlow(application) {
                     .execute(GetNoteListAction())
             )
             .addFlowVector(ACTION_EDIT_NOTE, FlowVector()
-                .execute(EditNoteFlow())
+                .execute(EditNoteAction())
                 .popBack(CreateNoteFragment::class)
                 .execute(GetNoteListAction()))
     }

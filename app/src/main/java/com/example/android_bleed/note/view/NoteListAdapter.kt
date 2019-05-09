@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.Note
 
-class NoteListAdapter(private val noteList: ArrayList<Note>) : RecyclerView.Adapter<NoteListAdapter.NoteViewHolder>() {
-
+class NoteListAdapter(private val noteList: ArrayList<Note>, private val onNoteClickListener: OnNoteClickListener) : RecyclerView.Adapter<NoteListAdapter.NoteViewHolder>() {
 
     fun setNoteList(noteList: ArrayList<Note>) {
         this.noteList.clear()
@@ -25,7 +24,11 @@ class NoteListAdapter(private val noteList: ArrayList<Note>) : RecyclerView.Adap
     override fun getItemCount(): Int = noteList.size
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(noteList[position])
+        val note = noteList[position]
+        holder.bind(note)
+        holder.itemView.setOnClickListener {
+            onNoteClickListener.onNoteClick(it, note)
+        }
     }
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,5 +39,9 @@ class NoteListAdapter(private val noteList: ArrayList<Note>) : RecyclerView.Adap
             tvNoteTitle.text = note.title
             tvNoteText.text = note.text
         }
+    }
+
+    interface OnNoteClickListener {
+        fun onNoteClick(view: View?, note: Note)
     }
 }
