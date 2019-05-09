@@ -42,12 +42,12 @@ class AuthenticationFlow(application: Application): AndroidFlow(application) {
 
             .addFlowVector(
                 ACTION_GOTO_REGISTER, FlowVector()
-                    .transitionTo(RegisterFragment::class)
+                    .transitionTo(RegisterFragment::class, true, CustomAnimation(R.anim.custom_slide_enter, R.anim.custom_slide_exit))
             )
 
             .addFlowVector(
                 ACTION_GOTO_LOGIN, FlowVector()
-                    .transitionTo(LoginFragment::class)
+                    .transitionTo(LoginFragment::class, true, CustomAnimation(R.anim.custom_slide_enter, R.anim.custom_slide_exit))
             )
     }
 

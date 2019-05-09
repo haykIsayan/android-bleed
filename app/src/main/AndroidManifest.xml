@@ -11,8 +11,6 @@
             android:theme="@style/AppTheme">
         <activity android:name=".main.MainActivity">
         </activity>
-        <activity android:name=".note.view.NoteListActivity">
-        </activity>
         <activity android:name=".authentication.view.AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
