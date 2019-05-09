@@ -55,7 +55,7 @@ class CreateNoteFragment : FlowFragment() {
                 saveNote(this)
                 return@setOnClickListener
             }
-            launchAuthFlow()
+            executeFlow(AuthenticationFlow::class)
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -74,13 +74,6 @@ class CreateNoteFragment : FlowFragment() {
         )
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        executeFlow(mCreateNoteFlow, CreateNoteFlow.ACTION_SAVE_NOTE, bundle)
-    }
-
-    private fun launchAuthFlow() {
-        val authenticationFlow = AuthenticationFlow(application = activity!!.application)
-        registerFlow(authenticationFlow)
-        launchFlow(authenticationFlow)
-
+        executeFlow(CreateNoteFlow::class, CreateNoteFlow.ACTION_SAVE_NOTE, bundle)
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android_bleed.flow.AndroidFlow
+import kotlin.reflect.KClass
 
 
 abstract class FlowFragment : Fragment() {
@@ -26,27 +27,11 @@ abstract class FlowFragment : Fragment() {
         return inflater.inflate(getLayoutResource(), container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    fun <L : AndroidFlow> executeFlow(flowKlass: KClass<L>,
+                                      vectorTag: String = AndroidFlow.ACTION_LAUNCH_FLOW,
+                                      bundle: Bundle = Bundle()) {
 
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    fun registerFlow(flow: AndroidFlow) {
-        (activity as FlowActivity).registerFlow(flow)
-    }
-
-    fun launchFlow(flow: AndroidFlow, bundle: Bundle = Bundle()) {
-        (activity as FlowActivity).launchFlow(flow)
-    }
-
-    fun executeFlow(flow: AndroidFlow, vectorTag: String, bundle: Bundle = Bundle()) {
-        (activity as FlowActivity).executeFlow(flow, vectorTag, bundle)
+        (activity as FlowActivity).executeFlow(flowKlass, vectorTag, bundle)
     }
 
     fun getFlowData() = (activity as FlowActivity).getFlowData()

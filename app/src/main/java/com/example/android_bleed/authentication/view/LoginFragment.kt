@@ -23,9 +23,6 @@ class LoginFragment : FlowFragment() {
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
 
-    private lateinit var mAuthenticationFlow: AuthenticationFlow
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getFlowData().observe(this, Observer {
@@ -35,20 +32,12 @@ class LoginFragment : FlowFragment() {
         })
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        mAuthenticationFlow = (activity as AuthActivity).getAuthFlow()
-//        registerFlow(mAuthenticationFlow)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,24 +57,14 @@ class LoginFragment : FlowFragment() {
             bundle.putString(User.EXTRA_PASSWORD, etPassword.text.toString())
 
             executeFlow(
-                flow = mAuthenticationFlow,
+                flowKlass = AuthenticationFlow::class,
                 vectorTag = AuthenticationFlow.ACTION_LOGIN,
                 bundle = bundle
             )
         }
 
         btnRegister.setOnClickListener {
-            executeFlow(mAuthenticationFlow, AuthenticationFlow.ACTION_GOTO_REGISTER)
+            executeFlow(flowKlass = AuthenticationFlow::class, vectorTag = AuthenticationFlow.ACTION_GOTO_REGISTER)
         }
-
-    }
-
-
-
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String){}
     }
 }
