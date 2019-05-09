@@ -21,7 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
 
-class NoteListFragment : FlowFragment() {
+class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
+
     override fun getLayoutResource(): Int = R.layout.fragment_note_list
 
     private lateinit var mNoteListFlow: AndroidFlow
@@ -71,7 +72,7 @@ class NoteListFragment : FlowFragment() {
 
         fabAddNote = view.findViewById(R.id.fab_add_note_fragment_note_list)
         rvNoteList = view.findViewById(R.id.rv_note_list_fragment_note_list)
-        mNoteListAdapter = NoteListAdapter(ArrayList())
+        mNoteListAdapter = NoteListAdapter(ArrayList(), this)
         rvNoteList.adapter = mNoteListAdapter
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
@@ -81,4 +82,13 @@ class NoteListFragment : FlowFragment() {
 
         super.onViewCreated(view, savedInstanceState)
     }
+
+    override fun onNoteClick(v: View?, note: Note) {
+        val bundle = Bundle()
+        bundle.putParcelable(Note.EXTRA_NOTE, note)
+        val createNoteFlow = CreateNoteFlow(activity!!.application)
+        registerFlow(createNoteFlow)
+        launchFlow(createNoteFlow, bundle)
+    }
+
 }
