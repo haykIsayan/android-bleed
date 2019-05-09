@@ -1,11 +1,13 @@
 package com.example.android_bleed.authentication
 
 import android.app.Application
+import com.example.android_bleed.R
 import com.example.android_bleed.flow.AndroidFlow
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
 import com.example.android_bleed.authentication.view.RegisterFragment
+import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.main.MainActivity
 
 class AuthenticationFlow(application: Application): AndroidFlow(application) {
@@ -14,8 +16,17 @@ class AuthenticationFlow(application: Application): AndroidFlow(application) {
 
         return FlowGraph()
 
-            .setRootStep(FlowVector()
-                .transitionTo(LoginFragment::class)
+            .setRootStep(
+                FlowVector()
+                    .transitionTo(
+                        LoginFragment::class, true,
+                        CustomAnimation(
+                            R.anim.custom_open_enter,
+                            R.anim.custom_open_exit,
+                            R.anim.custom_pop_enter,
+                            R.anim.custom_pop_exit
+                        )
+                    )
             )
 
             .addFlowVector(

@@ -1,8 +1,9 @@
-package com.example.android_bleed.flow.flowsteps
+package com.example.android_bleed.flow.flowsteps.fragment.transitions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android_bleed.flow.FlowResource
+import com.example.android_bleed.flow.flowsteps.FlowStep
 import com.example.android_bleed.flow.view.FlowFragment
 import kotlin.reflect.KClass
 

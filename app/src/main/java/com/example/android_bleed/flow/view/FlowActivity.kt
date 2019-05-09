@@ -11,6 +11,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.flow.AndroidFlow
 import com.example.android_bleed.flow.FlowResource
 import com.example.android_bleed.flow.flowsteps.FlowLauncher
+import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import kotlin.reflect.full.primaryConstructor
@@ -112,6 +113,19 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        // ANIMATION CONTROL
+        val fragmentAnimation = fragmentTransitionResource.fragmentAnimation
+        fragmentAnimation?.apply {
+            when (fragmentAnimation) {
+                is CustomAnimation -> {
+                    fragmentTransaction.setCustomAnimations(fragmentAnimation.enterAnimation,
+                        fragmentAnimation.exitAnimation,
+                        fragmentAnimation.popEnterAnimation,
+                        fragmentAnimation.popExitAnimation)
+                }
+            }
+        }
+
         if (fragmentTransitionResource.enterAnimationId != -1) {
             try {
                 fragmentTransaction.setTransition(fragmentTransitionResource.enterAnimationId)
@@ -123,13 +137,18 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val fragment = fragmentTransitionResource.fragmentKlass.primaryConstructor?.call() ?: return
         val bundle = fragmentTransitionResource.bundle
         bundle.putString("TAG", fragmentTransitionResource.flowName)
+        // ADD FLOW STEP ARGUMENT
         fragment.arguments = bundle
-        // back stack control
+        // BACK STACK CONTROL
         fragmentTransaction.addToBackStack(
             if (fragmentTransitionResource.addToBackStack) {
                 fragmentTransitionResource.fragmentKlass.java.name
             } else null
         )
+
+
+
+
         fragmentTransaction.replace(mFragmentContainerId, fragment).commit()
 
     }

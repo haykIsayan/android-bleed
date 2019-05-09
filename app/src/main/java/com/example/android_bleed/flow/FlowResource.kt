@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.TransitionRes
 import androidx.fragment.app.Fragment
+import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
 import com.example.android_bleed.flow.view.FlowActivity
 import com.example.android_bleed.flow.view.FlowFragment
 import kotlin.reflect.KClass
@@ -19,7 +20,8 @@ open class FlowResource (val status: Status = Status.PENDING,
 
     data class FragmentTransitionResource<F : Fragment> (val fragmentKlass: KClass<F>,
                                                          @TransitionRes val enterAnimationId: Int = -1,
-                                                         val addToBackStack: Boolean = true): FlowResource(Status.COMPLETED)
+                                                         val addToBackStack: Boolean = true,
+                                                         val fragmentAnimation: FragmentAnimation? = null): FlowResource(Status.COMPLETED)
 
     data class ActivityTransitionResource<A : FlowActivity> (val activityKlass: KClass<A>): FlowResource(Status.COMPLETED)
 
