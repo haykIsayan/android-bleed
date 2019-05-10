@@ -13,7 +13,7 @@ class NoteListActivity : FlowActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_list)
 
-        launchFlow(NoteListFlow(application))
+        launchFlow(NoteListFlow::class)
 
     }
 

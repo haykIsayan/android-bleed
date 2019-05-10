@@ -77,7 +77,7 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
         fabAddNote.setOnClickListener {
-            executeFlow(mNoteListFlow, NoteListFlow.ACTION_LAUNCH_CREATE_FLOW)
+            executeFlow(NoteListFlow::class, NoteListFlow.ACTION_LAUNCH_CREATE_FLOW)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -86,9 +86,7 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
     override fun onNoteClick(v: View?, note: Note) {
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        val createNoteFlow = CreateNoteFlow(activity!!.application)
-        registerFlow(createNoteFlow)
-        launchFlow(createNoteFlow, bundle)
+        executeFlow(flowKlass = CreateNoteFlow::class, bundle = bundle)
     }
 
 }

@@ -28,8 +28,7 @@ class MainActivity : FlowActivity() {
         this.mMainFlow = MainFlow(this.application)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
-        registerFlow(mMainFlow)
-        launchFlow(mMainFlow)
+        executeFlow(MainFlow::class)
 
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
@@ -39,7 +38,12 @@ class MainActivity : FlowActivity() {
     private fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val bundle = Bundle()
         bundle.putString(User.EXTRA_USERNAME, mCurrentUser?.userName)
-        executeFlow(mMainFlow, menuItem.title.toString(), bundle)
+
+        executeFlow(
+            flowKlass = MainFlow::class,
+            vectorTag = menuItem.title.toString(),
+            bundle = bundle
+        )
         return true
     }
 

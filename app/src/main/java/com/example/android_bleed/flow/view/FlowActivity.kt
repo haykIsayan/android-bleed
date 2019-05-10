@@ -11,8 +11,10 @@ import com.example.android_bleed.R
 import com.example.android_bleed.flow.AndroidFlow
 import com.example.android_bleed.flow.FlowResource
 import com.example.android_bleed.flow.flowsteps.FlowLauncher
+import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import java.lang.Exception
 import java.lang.IllegalArgumentException
+import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
@@ -37,24 +39,41 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         this.mFlowData.observe(this, this)
     }
 
-    fun registerFlow(flow: AndroidFlow) {
-        this.mFlowMap[flow::class.java.name] = flow
-        this.mFlowData.apply {
-            addSource(flow.getFlowData()) {
-                this.value = it
+    // todo/ code improvements
+
+    private fun <L : AndroidFlow> registerFlow(flowKlass: KClass<L>): AndroidFlow {
+        val flowName = flowKlass.java.name
+
+        var flow = mFlowMap[flowName]
+        flow.apply {
+
+            flow = flowKlass.constructors.first().call(application)
+
+            mFlowMap[flowName] = flow!!
+            mFlowData.apply {
+                addSource(flow!!.getFlowData()) {
+                    this.value = it
+                }
             }
         }
+        return flow!!
     }
 
-    fun launchFlow(flow: AndroidFlow, bundle: Bundle = Bundle()) {
+    /**
+     * PRIMARY CONTROLLER FUNCTIONS
+     */
+
+    fun <L : AndroidFlow> launchFlow(flowKlass: KClass<L>, bundle: Bundle = Bundle()) {
+        val flow = registerFlow(flowKlass)
         flow.launch(bundle = bundle)
     }
 
-    fun executeFlow(flow: AndroidFlow, vectorTag: String, bundle: Bundle = Bundle()) {
+    fun <L : AndroidFlow> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidFlow.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
+        val flow = registerFlow(flowKlass)
         flow.execute(vectorTag, bundle)
     }
 
-    fun getFlowData(): LiveData<FlowResource> = /*mCurrentFlow.getFlowData()*/ mFlowData
+    fun getFlowData(): LiveData<FlowResource> = mFlowData
 
     fun getFlowByName(flowName: String) = mFlowMap[flowName]
 
@@ -74,7 +93,7 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
             is FlowResource.FragmentTransitionResource<*> -> executeFragmentTransition(flowResource)
             is FlowResource.ActivityTransitionResource<*> -> executeActivityTransition(flowResource)
             is FlowResource.FragmentPopResource<*> -> executeFragmentPop(flowResource)
-            is FlowLauncher.FlowLauncherResource<*> -> executeFlowLaunch(flowResource)
+            is FlowLauncher.FlowLauncherResource<*> -> executeFlow(flowKlass = flowResource.flowKlass, bundle = flowResource.bundle)
             else -> {
                 if (flowResource.status == FlowResource.Status.COMPLETED) {
                     notifyFlowStepCompleted(flowResource.bundle, flowResource.flowName)
@@ -112,6 +131,19 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
+        // ANIMATION CONTROL
+        val fragmentAnimation = fragmentTransitionResource.fragmentAnimation
+        fragmentAnimation?.apply {
+            when (fragmentAnimation) {
+                is CustomAnimation -> {
+                    fragmentTransaction.setCustomAnimations(fragmentAnimation.enterAnimation,
+                        fragmentAnimation.exitAnimation,
+                        fragmentAnimation.popEnterAnimation,
+                        fragmentAnimation.popExitAnimation)
+                }
+            }
+        }
+
         if (fragmentTransitionResource.enterAnimationId != -1) {
             try {
                 fragmentTransaction.setTransition(fragmentTransitionResource.enterAnimationId)
@@ -123,15 +155,16 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val fragment = fragmentTransitionResource.fragmentKlass.primaryConstructor?.call() ?: return
         val bundle = fragmentTransitionResource.bundle
         bundle.putString("TAG", fragmentTransitionResource.flowName)
+        // ADD FLOW STEP ARGUMENT
         fragment.arguments = bundle
-        // back stack control
+        // BACK STACK CONTROL
         fragmentTransaction.addToBackStack(
             if (fragmentTransitionResource.addToBackStack) {
                 fragmentTransitionResource.fragmentKlass.java.name
             } else null
         )
-        fragmentTransaction.replace(mFragmentContainerId, fragment).commit()
 
+        fragmentTransaction.replace(mFragmentContainerId, fragment).commit()
     }
 
     private fun executeFragmentPop(fragmentPopResource: FlowResource.FragmentPopResource<*>) {
@@ -143,9 +176,4 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         notifyFlowStepCompleted(fragmentPopResource.bundle, fragmentPopResource.flowName)
     }
 
-    private fun executeFlowLaunch(flowLauncherResource: FlowLauncher.FlowLauncherResource<*>) {
-        val flow = flowLauncherResource.flowKlass.constructors.first().call(application)
-        registerFlow(flow = flow)
-        launchFlow(flow = flow)
-    }
 }

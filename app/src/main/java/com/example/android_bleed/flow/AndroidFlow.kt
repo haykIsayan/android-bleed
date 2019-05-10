@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.example.android_bleed.flow.flowsteps.*
+import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
+import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentDestination
+import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentPop
 import com.example.android_bleed.flow.view.FlowActivity
 import com.example.android_bleed.flow.view.FlowFragment
 import kotlin.reflect.KClass
@@ -123,9 +126,16 @@ abstract class AndroidFlow (val mApplication: Application){
 
         }
 
-        fun <F : Fragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true) =
+        fun <F : Fragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true,
+                                        fragmentAnimation: FragmentAnimation? = null) =
             apply {
-                mFlowStepList.add(FragmentDestination(fragmentKlass = fragmentKlass, addToBackStack = addToBackStack))
+                mFlowStepList.add(
+                    FragmentDestination(
+                        fragmentKlass = fragmentKlass,
+                        addToBackStack = addToBackStack,
+                        fragmentAnimation = fragmentAnimation
+                    )
+                )
             }
 
         fun execute(userAction: UserAction) =
@@ -135,7 +145,11 @@ abstract class AndroidFlow (val mApplication: Application){
 
         fun <F : FlowFragment> popBack(fragmentKlass: KClass<F>? = null) =
             apply {
-                this.mFlowStepList.add(FragmentPop(fragmentKlass))
+                this.mFlowStepList.add(
+                    FragmentPop(
+                        fragmentKlass
+                    )
+                )
             }
 
         fun <F : AndroidFlow> launchFlow(flowKlass: KClass<F>) =
