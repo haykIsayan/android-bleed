@@ -5,27 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
-import com.example.android_bleed.editing.CreateNoteFlow
+import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.data.models.Note
-import com.example.android_bleed.flow.AndroidFlow
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.view.FlowFragment
-import com.example.android_bleed.note.NoteListFlow
+import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.view.LegendsFragment
+import com.example.android_bleed.note.NoteListLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
 
-class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
+class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener {
 
     override fun getLayoutResource(): Int = R.layout.fragment_note_list
 
-    private lateinit var mNoteListFlow: AndroidFlow
+    private lateinit var mNoteListLegend: AndroidLegend
 
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var rvNoteList: RecyclerView
@@ -38,6 +38,9 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
 
             when (it.status) {
                 FlowResource.Status.FAILED -> {
+
+                    // todo start empty state
+
                     Toast.makeText(activity, "THIS BITCH EMPTY", Toast.LENGTH_SHORT).show()
                 }
                 FlowResource.Status.COMPLETED -> {
@@ -57,7 +60,7 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        this.mNoteListFlow = getFlowByName(NoteListFlow::class.java.name)?:return
+        this.mNoteListLegend = getFlowByName(NoteListLegend::class.java.name)?:return
     }
 
     override fun onCreateView(
@@ -75,9 +78,11 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
         mNoteListAdapter = NoteListAdapter(ArrayList(), this)
         rvNoteList.adapter = mNoteListAdapter
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
+        rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
-            executeFlow(NoteListFlow::class, NoteListFlow.ACTION_LAUNCH_CREATE_FLOW)
+            executeFlow(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +91,7 @@ class NoteListFragment : FlowFragment(), NoteListAdapter.OnNoteClickListener {
     override fun onNoteClick(v: View?, note: Note) {
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        executeFlow(flowKlass = CreateNoteFlow::class, bundle = bundle)
+        executeFlow(flowKlass = CreateNoteLegend::class, bundle = bundle)
     }
 
 }

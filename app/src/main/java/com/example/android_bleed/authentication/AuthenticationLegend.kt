@@ -1,7 +1,7 @@
 package com.example.android_bleed.authentication
 
 import android.app.Application
-import com.example.android_bleed.flow.AndroidFlow
+import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
@@ -9,7 +9,7 @@ import com.example.android_bleed.authentication.view.RegisterFragment
 import com.example.android_bleed.main.MainActivity
 import com.example.android_bleed.utilities.SlideAnimation
 
-class AuthenticationFlow(application: Application): AndroidFlow(application) {
+class AuthenticationLegend(application: Application): AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph {
 

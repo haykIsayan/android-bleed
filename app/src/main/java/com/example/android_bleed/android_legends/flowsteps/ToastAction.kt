@@ -1,10 +1,10 @@
-package com.example.android_bleed.flow.flowsteps
+package com.example.android_bleed.android_legends.flowsteps
 
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.flow.FlowResource
+import com.example.android_bleed.android_legends.FlowResource
 
 class ToastAction (val message: String = "",
                    @StringRes val messageRes: Int = -1,

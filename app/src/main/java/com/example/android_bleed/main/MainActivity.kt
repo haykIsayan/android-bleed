@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.flow.AndroidFlow
-import com.example.android_bleed.flow.view.FlowActivity
+import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : FlowActivity() {
+class MainActivity : LegendsActivity() {
 
     override fun getFragmentContainerId(): Int {
         return R.id.fl_main_container_activity_main
     }
 
     private var mCurrentUser: User? = null
-    private lateinit var mMainFlow: AndroidFlow
+    private lateinit var mMainLegend: AndroidLegend
 
     private lateinit var bnvMainNavigation: BottomNavigationView
 
@@ -25,10 +25,10 @@ class MainActivity : FlowActivity() {
 
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
 
-        this.mMainFlow = MainFlow(this.application)
+        this.mMainLegend = MainLegend(this.application)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
-        executeFlow(MainFlow::class)
+        executeFlow(MainLegend::class)
 
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
@@ -40,7 +40,7 @@ class MainActivity : FlowActivity() {
         bundle.putString(User.EXTRA_USERNAME, mCurrentUser?.userName)
 
         executeFlow(
-            flowKlass = MainFlow::class,
+            flowKlass = MainLegend::class,
             vectorTag = menuItem.title.toString(),
             bundle = bundle
         )

@@ -1,9 +1,9 @@
-package com.example.android_bleed.flow.flowsteps
+package com.example.android_bleed.android_legends.flowsteps
 
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.android_bleed.flow.FlowResource
+import com.example.android_bleed.android_legends.FlowResource
 
 abstract class FlowStep {
 

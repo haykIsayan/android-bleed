@@ -4,19 +4,19 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthUtilities
-import com.example.android_bleed.authentication.AuthenticationFlow
+import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.view.FlowActivity
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.view.LegendsActivity
 
-class AuthActivity : FlowActivity() {
+class AuthActivity : LegendsActivity() {
     override fun getFragmentContainerId(): Int = R.id.fl_main_fragment_container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        executeFlow(flowKlass = AuthenticationFlow::class)
+        executeFlow(flowKlass = AuthenticationLegend::class)
 
         getFlowData().observe(this, Observer {
             if (it.status == FlowResource.Status.COMPLETED) {

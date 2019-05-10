@@ -1,20 +1,20 @@
-package com.example.android_bleed.flow
+package com.example.android_bleed.android_legends
 
 import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.android_bleed.flow.flowsteps.*
-import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
-import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
-import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentDestination
-import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentPop
-import com.example.android_bleed.flow.view.FlowActivity
-import com.example.android_bleed.flow.view.FlowFragment
+import com.example.android_bleed.android_legends.flowsteps.*
+import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
+import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnimation
+import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.FragmentDestination
+import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.FragmentPop
+import com.example.android_bleed.android_legends.view.LegendsActivity
+import com.example.android_bleed.android_legends.view.LegendsFragment
 import kotlin.reflect.KClass
 
-abstract class AndroidFlow (private val mApplication: Application){
+abstract class AndroidLegend (private val mApplication: Application){
 
     private val mFlowName = this::class.java.name
     private lateinit var mFlowGraph: FlowGraph
@@ -106,7 +106,7 @@ abstract class AndroidFlow (private val mApplication: Application){
         private val mFlowVectorMap = mutableMapOf<String, FlowVector>()
 
         fun setRootStep(flowVector: FlowVector) = apply {
-            mFlowVectorMap[AndroidFlow.ACTION_LAUNCH_FLOW] = flowVector
+            mFlowVectorMap[AndroidLegend.ACTION_LAUNCH_FLOW] = flowVector
         }
 
         fun addFlowVector(stepTag: String, flowVector: FlowVector) = apply { mFlowVectorMap[stepTag] = flowVector }
@@ -119,11 +119,11 @@ abstract class AndroidFlow (private val mApplication: Application){
         private val mFlowStepList = mutableListOf<FlowStep>()
 
 
-        fun <A : FlowActivity> startActivity(activityKlass: KClass<A>, customAnimation: CustomAnimation? = null) = apply {
+        fun <A : LegendsActivity> startActivity(activityKlass: KClass<A>, customAnimation: CustomAnimation? = null) = apply {
             mFlowStepList.add(ActivityDestination(activityKlass = activityKlass, customAnimation = customAnimation))
         }
 
-        fun <A: FlowActivity> startActivityForResult(activityKlass: KClass<A>) = apply {
+        fun <A: LegendsActivity> startActivityForResult(activityKlass: KClass<A>) = apply {
 
         }
 
@@ -144,7 +144,7 @@ abstract class AndroidFlow (private val mApplication: Application){
                 mFlowStepList.add(userAction)
             }
 
-        fun <F : FlowFragment> popBack(fragmentKlass: KClass<F>? = null) =
+        fun <F : LegendsFragment> popBack(fragmentKlass: KClass<F>? = null) =
             apply {
                 this.mFlowStepList.add(
                     FragmentPop(
@@ -153,7 +153,7 @@ abstract class AndroidFlow (private val mApplication: Application){
                 )
             }
 
-        fun <F : AndroidFlow> launchFlow(flowKlass: KClass<F>) =
+        fun <F : AndroidLegend> launchFlow(flowKlass: KClass<F>) =
                 apply {
                     this.mFlowStepList.add(FlowLauncher(flowKlass = flowKlass))
                 }

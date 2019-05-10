@@ -4,11 +4,9 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android_bleed.data.models.Note
-import com.example.android_bleed.data.models.User
 import com.example.android_bleed.data.repositories.NoteRepository
-import com.example.android_bleed.data.repositories.UserRepository
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.flowsteps.UserAction
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.flowsteps.UserAction
 
 class SaveNoteAction : UserAction.UserApplicationAction() {
 

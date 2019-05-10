@@ -1,9 +1,9 @@
 package com.example.android_bleed.reminder
 
 import android.app.Application
-import com.example.android_bleed.flow.AndroidFlow
+import com.example.android_bleed.android_legends.AndroidLegend
 
-class ReminderListFlow(application: Application) : AndroidFlow(application) {
+class ReminderListLegend(application: Application) : AndroidLegend(application) {
 
 
     override fun onCreateFlowGraph(): FlowGraph {

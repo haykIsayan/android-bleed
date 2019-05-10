@@ -1,4 +1,4 @@
-package com.example.android_bleed.flow.view
+package com.example.android_bleed.android_legends.view
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,21 +8,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.example.android_bleed.R
-import com.example.android_bleed.flow.AndroidFlow
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.flowsteps.FlowLauncher
-import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
+import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.flowsteps.FlowLauncher
+import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
+abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
 
-    private lateinit var mCurrentFlow: AndroidFlow
-
-
-    private val mFlowMap = mutableMapOf<String, AndroidFlow>()
+    private val mFlowMap = mutableMapOf<String, AndroidLegend>()
 
     private val mFlowData = MediatorLiveData<FlowResource>()
 
@@ -41,7 +38,7 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
 
     // todo/ code improvements
 
-    private fun <L : AndroidFlow> registerFlow(flowKlass: KClass<L>): AndroidFlow {
+    private fun <L : AndroidLegend> registerFlow(flowKlass: KClass<L>): AndroidLegend {
         val flowName = flowKlass.java.name
 
         var flow = mFlowMap[flowName]
@@ -63,7 +60,7 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
      * PRIMARY CONTROLLER FUNCTIONS
      */
 
-    fun <L : AndroidFlow> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidFlow.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
+    fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
         val flow = registerFlow(flowKlass)
         flow.execute(vectorTag, bundle)
     }
