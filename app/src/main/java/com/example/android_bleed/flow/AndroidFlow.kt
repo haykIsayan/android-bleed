@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.example.android_bleed.flow.flowsteps.*
+import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
 import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentDestination
 import com.example.android_bleed.flow.flowsteps.fragment.transitions.FragmentPop
@@ -13,7 +14,7 @@ import com.example.android_bleed.flow.view.FlowActivity
 import com.example.android_bleed.flow.view.FlowFragment
 import kotlin.reflect.KClass
 
-abstract class AndroidFlow (val mApplication: Application){
+abstract class AndroidFlow (private val mApplication: Application){
 
     private val mFlowName = this::class.java.name
     private lateinit var mFlowGraph: FlowGraph
@@ -118,8 +119,8 @@ abstract class AndroidFlow (val mApplication: Application){
         private val mFlowStepList = mutableListOf<FlowStep>()
 
 
-        fun <A : FlowActivity> startActivity(activityKlass: KClass<A>) = apply {
-            mFlowStepList.add(ActivityDestination(activityKlass = activityKlass))
+        fun <A : FlowActivity> startActivity(activityKlass: KClass<A>, customAnimation: CustomAnimation? = null) = apply {
+            mFlowStepList.add(ActivityDestination(activityKlass = activityKlass, customAnimation = customAnimation))
         }
 
         fun <A: FlowActivity> startActivityForResult(activityKlass: KClass<A>) = apply {

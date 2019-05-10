@@ -113,6 +113,12 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val intent = Intent(this, activityTransitionResource.activityKlass.java)
         intent.putExtras(activityTransitionResource.bundle)
         startActivity(intent)
+
+        val customAnimation = activityTransitionResource.customAnimation
+        // ANIMATION HANDLING
+        customAnimation?.apply {
+            overridePendingTransition(customAnimation.enterAnimation, customAnimation.exitAnimation)
+        }
     }
 
     /**

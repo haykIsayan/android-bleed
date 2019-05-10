@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.TransitionRes
 import androidx.fragment.app.Fragment
+import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
 import com.example.android_bleed.flow.view.FlowActivity
 import com.example.android_bleed.flow.view.FlowFragment
@@ -23,7 +24,7 @@ open class FlowResource (val status: Status = Status.PENDING,
                                                          val addToBackStack: Boolean = true,
                                                          val fragmentAnimation: FragmentAnimation? = null): FlowResource(Status.COMPLETED)
 
-    data class ActivityTransitionResource<A : FlowActivity> (val activityKlass: KClass<A>): FlowResource(Status.COMPLETED)
+    data class ActivityTransitionResource<A : FlowActivity> (val activityKlass: KClass<A>, val customAnimation: CustomAnimation? = null): FlowResource(Status.COMPLETED)
 
     data class FragmentPopResource<F : FlowFragment> (val fragmentKlass : KClass<F>? = null): FlowResource(Status.COMPLETED)
 
