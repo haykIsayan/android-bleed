@@ -1,12 +1,12 @@
-package com.example.android_bleed.flow.flowsteps.fragment.transitions
+package com.example.android_bleed.android_legends.flowsteps.fragment.transitions
 
 import androidx.annotation.TransitionRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.flowsteps.FlowStep
-import com.example.android_bleed.flow.flowsteps.fragment.FragmentAnimation
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.flowsteps.FlowStep
+import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnimation
 import kotlin.reflect.KClass
 
 class FragmentDestination<F : Fragment> (val fragmentKlass: KClass<F>,

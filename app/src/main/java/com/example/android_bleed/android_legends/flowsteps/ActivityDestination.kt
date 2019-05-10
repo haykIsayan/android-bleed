@@ -1,13 +1,13 @@
-package com.example.android_bleed.flow.flowsteps
+package com.example.android_bleed.android_legends.flowsteps
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.flow.view.FlowActivity
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
+import com.example.android_bleed.android_legends.view.LegendsActivity
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import kotlin.reflect.KClass
 
-class ActivityDestination <A: FlowActivity>  (val activityKlass: KClass<A>, val customAnimation: CustomAnimation? = null ) : FlowStep() {
+class ActivityDestination <A: LegendsActivity>  (val activityKlass: KClass<A>, val customAnimation: CustomAnimation? = null ) : FlowStep() {
     override fun execute(): LiveData<FlowResource> {
         val data = MutableLiveData<FlowResource>()
         val activityTransitionResource = FlowResource.ActivityTransitionResource(

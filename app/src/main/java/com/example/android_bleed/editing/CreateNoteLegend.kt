@@ -4,10 +4,10 @@ import android.app.Application
 import com.example.android_bleed.editing.domain.EditNoteAction
 import com.example.android_bleed.editing.domain.SaveNoteAction
 import com.example.android_bleed.editing.view.CreateNoteFragment
-import com.example.android_bleed.flow.AndroidFlow
+import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.note.domain.GetNoteListAction
 
-class CreateNoteFlow (application: Application) : AndroidFlow(application) {
+class CreateNoteLegend (application: Application) : AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()

@@ -9,13 +9,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.android_bleed.R
-import com.example.android_bleed.authentication.AuthenticationFlow
+import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.view.FlowFragment
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.view.LegendsFragment
 
 
-class LoginFragment : FlowFragment() {
+class LoginFragment : LegendsFragment() {
     override fun getLayoutResource(): Int = R.layout.fragment_login
 
     private lateinit var etUsername: EditText
@@ -57,14 +57,14 @@ class LoginFragment : FlowFragment() {
             bundle.putString(User.EXTRA_PASSWORD, etPassword.text.toString())
 
             executeFlow(
-                flowKlass = AuthenticationFlow::class,
-                vectorTag = AuthenticationFlow.ACTION_LOGIN,
+                flowKlass = AuthenticationLegend::class,
+                vectorTag = AuthenticationLegend.ACTION_LOGIN,
                 bundle = bundle
             )
         }
 
         btnRegister.setOnClickListener {
-            executeFlow(flowKlass = AuthenticationFlow::class, vectorTag = AuthenticationFlow.ACTION_GOTO_REGISTER)
+            executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_REGISTER)
         }
     }
 }

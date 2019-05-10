@@ -1,9 +1,6 @@
 package com.example.android_bleed.authentication.view
 
-import android.app.Application
-import android.content.Context
 import android.os.Bundle
-import android.text.LoginFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,15 +10,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.android_bleed.R
-import com.example.android_bleed.authentication.AuthenticationFlow
+import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.flow.FlowResource
-import com.example.android_bleed.flow.view.FlowFragment
-import kotlin.math.log
+import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.view.LegendsFragment
 
 
-class RegisterFragment : FlowFragment() {
+class RegisterFragment : LegendsFragment() {
     override fun getLayoutResource(): Int = R.layout.fragment_register
 
     private lateinit var etUsername: EditText
@@ -74,7 +70,7 @@ class RegisterFragment : FlowFragment() {
         }
 
         btnLogin.setOnClickListener {
-            executeFlow(flowKlass = AuthenticationFlow::class, vectorTag = AuthenticationFlow.ACTION_GOTO_LOGIN)
+            executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_LOGIN)
         }
 
     }
@@ -100,7 +96,7 @@ class RegisterFragment : FlowFragment() {
 
         val bundle = Bundle()
         bundle.putParcelable(User.EXTRA_USER, user)
-        executeFlow(flowKlass = AuthenticationFlow::class, vectorTag = AuthenticationFlow.ACTION_REGISTER, bundle = bundle)
+        executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_REGISTER, bundle = bundle)
     }
 
 }

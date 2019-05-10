@@ -3,11 +3,12 @@
 
     <item
             android:id="@+id/menu_note_list"
-            android:icon="@android:drawable/edit_text"
+            android:icon="@android:drawable/ic_menu_edit"
             android:title="My Notes"/>
 
     <item
             android:id="@+id/menu_reminder_list"
+            android:icon="@android:drawable/ic_popup_reminder"
             android:title="My Reminders"/>
 
 </menu>

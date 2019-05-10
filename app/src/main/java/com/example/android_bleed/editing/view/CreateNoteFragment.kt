@@ -1,7 +1,6 @@
 package com.example.android_bleed.editing.view
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +8,15 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthUtilities
-import com.example.android_bleed.authentication.AuthenticationFlow
+import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.editing.CreateNoteFlow
-import com.example.android_bleed.flow.AndroidFlow
-import com.example.android_bleed.flow.view.FlowFragment
+import com.example.android_bleed.editing.CreateNoteLegend
+import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class CreateNoteFragment : FlowFragment() {
+class CreateNoteFragment : LegendsFragment() {
 
     override fun getLayoutResource(): Int = R.layout.fragment_create_note
 
@@ -26,12 +25,12 @@ class CreateNoteFragment : FlowFragment() {
     private lateinit var etNoteText: EditText
     private lateinit var fabSaveNote: FloatingActionButton
 
-    private lateinit var mCreateNoteFlow: AndroidFlow
+    private lateinit var mCreateNoteLegend: AndroidLegend
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCreateNoteFlow = getFlowByName(CreateNoteFlow::class.java.name)?:return
+        mCreateNoteLegend = getFlowByName(CreateNoteLegend::class.java.name)?:return
 
     }
 
@@ -55,7 +54,7 @@ class CreateNoteFragment : FlowFragment() {
                 saveNote(this)
                 return@setOnClickListener
             }
-            executeFlow(AuthenticationFlow::class)
+            executeFlow(AuthenticationLegend::class)
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -74,6 +73,6 @@ class CreateNoteFragment : FlowFragment() {
         )
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        executeFlow(CreateNoteFlow::class, CreateNoteFlow.ACTION_SAVE_NOTE, bundle)
+        executeFlow(CreateNoteLegend::class, CreateNoteLegend.ACTION_SAVE_NOTE, bundle)
     }
 }
