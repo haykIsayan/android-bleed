@@ -1,14 +1,13 @@
 package com.example.android_bleed.authentication
 
 import android.app.Application
-import com.example.android_bleed.R
 import com.example.android_bleed.flow.AndroidFlow
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
 import com.example.android_bleed.authentication.view.RegisterFragment
-import com.example.android_bleed.flow.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.main.MainActivity
+import com.example.android_bleed.utilities.SlideAnimation
 
 class AuthenticationFlow(application: Application): AndroidFlow(application) {
 
@@ -18,36 +17,28 @@ class AuthenticationFlow(application: Application): AndroidFlow(application) {
 
             .setRootStep(
                 FlowVector()
-                    .transitionTo(
-                        LoginFragment::class, true,
-                        CustomAnimation(
-                            R.anim.custom_open_enter,
-                            R.anim.custom_open_exit,
-                            R.anim.custom_pop_enter,
-                            R.anim.custom_pop_exit
-                        )
-                    )
+                    .transitionTo(LoginFragment::class, true, SlideAnimation())
             )
 
             .addFlowVector(
                 ACTION_LOGIN, FlowVector()
                 .execute(LoginAction())
-                .startActivity(MainActivity::class))
+                .startActivity(MainActivity::class, SlideAnimation()))
 
             .addFlowVector(
                 ACTION_REGISTER, FlowVector()
                 .execute(RegisterAction())
-                .startActivity(MainActivity::class)
+                .startActivity(MainActivity::class, SlideAnimation())
             )
 
             .addFlowVector(
                 ACTION_GOTO_REGISTER, FlowVector()
-                    .transitionTo(RegisterFragment::class)
+                    .transitionTo(RegisterFragment::class, true, SlideAnimation())
             )
 
             .addFlowVector(
                 ACTION_GOTO_LOGIN, FlowVector()
-                    .transitionTo(LoginFragment::class)
+                    .transitionTo(LoginFragment::class, true, SlideAnimation())
             )
     }
 

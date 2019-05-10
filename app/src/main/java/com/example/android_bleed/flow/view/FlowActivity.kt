@@ -63,11 +63,6 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
      * PRIMARY CONTROLLER FUNCTIONS
      */
 
-    fun <L : AndroidFlow> launchFlow(flowKlass: KClass<L>, bundle: Bundle = Bundle()) {
-        val flow = registerFlow(flowKlass)
-        flow.launch(bundle = bundle)
-    }
-
     fun <L : AndroidFlow> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidFlow.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
         val flow = registerFlow(flowKlass)
         flow.execute(vectorTag, bundle)
@@ -118,6 +113,12 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         val intent = Intent(this, activityTransitionResource.activityKlass.java)
         intent.putExtras(activityTransitionResource.bundle)
         startActivity(intent)
+
+        val customAnimation = activityTransitionResource.customAnimation
+        // ANIMATION HANDLING
+        customAnimation?.apply {
+            overridePendingTransition(customAnimation.enterAnimation, customAnimation.exitAnimation)
+        }
     }
 
     /**
@@ -136,10 +137,16 @@ abstract class FlowActivity : AppCompatActivity(), Observer<FlowResource> {
         fragmentAnimation?.apply {
             when (fragmentAnimation) {
                 is CustomAnimation -> {
-                    fragmentTransaction.setCustomAnimations(fragmentAnimation.enterAnimation,
-                        fragmentAnimation.exitAnimation,
-                        fragmentAnimation.popEnterAnimation,
-                        fragmentAnimation.popExitAnimation)
+                    if (fragmentAnimation.popEnterAnimation == -1 || fragmentAnimation.popExitAnimation == -1) {
+                        fragmentTransaction.setCustomAnimations(fragmentAnimation.enterAnimation, fragmentAnimation.exitAnimation)
+                    } else {
+                        fragmentTransaction.setCustomAnimations(
+                            fragmentAnimation.enterAnimation,
+                            fragmentAnimation.exitAnimation,
+                            fragmentAnimation.popEnterAnimation,
+                            fragmentAnimation.popExitAnimation
+                        )
+                    }
                 }
             }
         }

@@ -8,6 +8,6 @@ class CustomAnimation (
     @AnimRes
     val exitAnimation: Int,
     @AnimRes
-    val popEnterAnimation: Int,
+    val popEnterAnimation: Int = -1,
     @AnimRes
-    val popExitAnimation: Int) : FragmentAnimation()
+    val popExitAnimation: Int = -1) : FragmentAnimation()
