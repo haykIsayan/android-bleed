@@ -2,7 +2,7 @@ package com.example.android_bleed.flow.flowsteps.fragment
 
 import androidx.annotation.AnimRes
 
-class CustomAnimation (
+open class CustomAnimation (
     @AnimRes
     val enterAnimation: Int,
     @AnimRes
