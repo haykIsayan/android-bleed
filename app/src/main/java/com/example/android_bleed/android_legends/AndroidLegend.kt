@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.room.Ignore
 import com.example.android_bleed.android_legends.flowsteps.*
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnimation
@@ -12,18 +13,24 @@ import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.
 import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.FragmentPop
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
+import java.io.Serializable
+import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 
-abstract class AndroidLegend (private val mApplication: Application){
+abstract class AndroidLegend(@Transient private val mApplication: Application) : Serializable{
 
     private val mFlowName = this::class.java.name
+    @Transient
     private lateinit var mFlowGraph: FlowGraph
+    @Transient
     private lateinit var mCurrentVectorIterator: FlowVectorIterator
 
+    @Transient
     private var mFlowData = MediatorLiveData<FlowResource>()
 
 
     companion object {
+        const val ACTION_LAUNCH_ROOT = "Action.Launch.Root"
         const val ACTION_LAUNCH_FLOW = "Action.Launch.Flow" }
 
     init {
@@ -89,7 +96,14 @@ abstract class AndroidLegend (private val mApplication: Application){
         }
     }
 
+    /**
+     * ACCESSIBILITY FUNCTIONS
+     */
+
     fun getFlowData(): LiveData<FlowResource> = mFlowData
+
+    fun getRoot() = mFlowGraph.getRoot()
+
 
     /**
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,17 +119,23 @@ abstract class AndroidLegend (private val mApplication: Application){
 
         private val mFlowVectorMap = mutableMapOf<String, FlowVector>()
 
-        fun setRootStep(flowVector: FlowVector) = apply {
+        fun startWith(flowVector: FlowVector) = apply {
             mFlowVectorMap[AndroidLegend.ACTION_LAUNCH_FLOW] = flowVector
         }
 
+        fun <L : LegendsActivity> setRoot(activityKlass : KClass<L>, customAnimation: CustomAnimation? = null) = apply {
+            mFlowVectorMap[ACTION_LAUNCH_ROOT] = FlowVector().startActivity(activityKlass = activityKlass, customAnimation = customAnimation)
+        }
+
         fun addFlowVector(stepTag: String, flowVector: FlowVector) = apply { mFlowVectorMap[stepTag] = flowVector }
+
+        fun getRoot (): FlowStep? = mFlowVectorMap[ACTION_LAUNCH_ROOT]?.getStepList()?.first()
 
         fun getFlowVector(stepTag: String) = mFlowVectorMap[stepTag]
 
     }
 
-    inner class FlowVector {
+    class FlowVector {
         private val mFlowStepList = mutableListOf<FlowStep>()
 
 
@@ -172,14 +192,6 @@ abstract class AndroidLegend (private val mApplication: Application){
         }
     }
 
-
-
-
-
-
-
-
-
-
+    data class LegendLauncher<A : AndroidLegend> (val androidLegendKlass: KClass<A>): Serializable
 
 }

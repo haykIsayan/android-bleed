@@ -11,7 +11,7 @@ class NoteListLegend(application: Application) : AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph =
         FlowGraph()
-            .setRootStep(FlowVector().transitionTo(NoteListFragment::class).execute(GetNoteListAction()))
+            .startWith(FlowVector().transitionTo(NoteListFragment::class).execute(GetNoteListAction()))
 
             .addFlowVector(ACTION_LAUNCH_CREATE_FLOW, FlowVector().launchFlow(CreateNoteLegend::class))
 

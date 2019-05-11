@@ -15,7 +15,6 @@ class MainActivity : LegendsActivity() {
     }
 
     private var mCurrentUser: User? = null
-    private lateinit var mMainLegend: AndroidLegend
 
     private lateinit var bnvMainNavigation: BottomNavigationView
 
@@ -24,11 +23,7 @@ class MainActivity : LegendsActivity() {
         setContentView(R.layout.activity_main)
 
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
-
-        this.mMainLegend = MainLegend(this.application)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
-
-        executeFlow(MainLegend::class)
 
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
