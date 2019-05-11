@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "UserTable")
 data class User(
     @PrimaryKey(autoGenerate = true)
-    val userId: Int = -1,
+    val userId: Int?,
     @ColumnInfo(name = "user_name")
     val userName: String,
     @ColumnInfo(name = "first_name")
@@ -17,7 +17,7 @@ data class User(
     @ColumnInfo(name = "last_name")
     val lastName: String = "",
     @ColumnInfo(name = "password")
-    val password: String = ""
+    var password: String = ""
 ) : Parcelable {
 
 
@@ -30,7 +30,7 @@ data class User(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(userId)
+        parcel.writeInt(userId!!)
         parcel.writeString(userName)
         parcel.writeString(firstName)
         parcel.writeString(lastName)

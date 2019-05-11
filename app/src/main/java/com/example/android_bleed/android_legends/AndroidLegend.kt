@@ -119,31 +119,17 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
 
         private val mFlowVectorMap = mutableMapOf<String, FlowVector>()
 
-        fun setRootStep(flowVector: FlowVector) = apply {
+        fun startWith(flowVector: FlowVector) = apply {
             mFlowVectorMap[AndroidLegend.ACTION_LAUNCH_FLOW] = flowVector
         }
 
-        fun <L : LegendsActivity> setRoot(activityKlass : KClass<L>) = apply {
-            mFlowVectorMap[ACTION_LAUNCH_ROOT] = FlowVector().startActivity(activityKlass = activityKlass)
+        fun <L : LegendsActivity> setRoot(activityKlass : KClass<L>, customAnimation: CustomAnimation? = null) = apply {
+            mFlowVectorMap[ACTION_LAUNCH_ROOT] = FlowVector().startActivity(activityKlass = activityKlass, customAnimation = customAnimation)
         }
 
         fun addFlowVector(stepTag: String, flowVector: FlowVector) = apply { mFlowVectorMap[stepTag] = flowVector }
 
-
-        fun getRoot (): KClass<out LegendsActivity>? {
-
-            val vector = mFlowVectorMap[ACTION_LAUNCH_ROOT]?: return null
-//                ?: throw IllegalArgumentException("WTF")
-
-            val activityDestination = vector.getStepList().first()
-            when (activityDestination) {
-                is ActivityDestination<*> -> {
-                    return activityDestination.getActivityKlass()
-                }
-            }
-            return null
-        }
-
+        fun getRoot (): FlowStep? = mFlowVectorMap[ACTION_LAUNCH_ROOT]?.getStepList()?.first()
 
         fun getFlowVector(stepTag: String) = mFlowVectorMap[stepTag]
 

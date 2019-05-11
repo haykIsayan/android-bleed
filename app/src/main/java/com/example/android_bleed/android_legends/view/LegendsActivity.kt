@@ -1,7 +1,6 @@
 package com.example.android_bleed.android_legends.view
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.example.android_bleed.R
 import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.flowsteps.ActivityDestination
 import com.example.android_bleed.android_legends.flowsteps.FlowLauncher
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import java.lang.Exception
@@ -59,7 +59,6 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
         }
     }
 
-
     private fun <L : AndroidLegend> initAndroidLegend(flowKlass: KClass<L>) = flowKlass.constructors.first().call(application)
 
     private fun <L : AndroidLegend> registerFlow(flowKlass: KClass<L>): AndroidLegend {
@@ -94,22 +93,23 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
      */
 
     fun <L : AndroidLegend> launchLegend(legendKlass: KClass<L>) {
-
         val legend = initAndroidLegend(legendKlass)
-
-        val legendsActivityKlass = legend.getRoot()
-
-        legendsActivityKlass?.apply {
-            val intent = Intent(this@LegendsActivity, this.java)
-            val bundle = Bundle()
-            bundle.putSerializable(LAUNCHER_LEGEND, legend)
-            intent.putExtras(bundle)
-            startActivity(intent)
+        val legendsDestination = legend.getRoot()
+        legendsDestination?.apply {
+            when (this) {
+                is ActivityDestination<*> -> {
+                    val resource =
+                        FlowResource.ActivityTransitionResource(this.getActivityKlass(), this.customAnimation)
+                    val bundle = Bundle()
+                    bundle.putSerializable(LAUNCHER_LEGEND, legend)
+                    resource.bundle = bundle
+                    executeActivityTransition(resource)
+                }
+            }
             return
         }
         executeFlow(legendKlass)
     }
-
 
     fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
         val flow = registerFlow(flowKlass)
@@ -230,5 +230,4 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
         fragmentManager.popBackStack()
         notifyFlowStepCompleted(fragmentPopResource.bundle, fragmentPopResource.flowName)
     }
-
 }

@@ -8,6 +8,7 @@ import com.example.android_bleed.data.models.User
 import com.example.android_bleed.data.repositories.UserRepository
 import com.example.android_bleed.android_legends.FlowResource
 import com.example.android_bleed.android_legends.flowsteps.UserAction
+import com.example.android_bleed.authentication.AuthUtilities
 
 class LoginAction : UserAction.UserApplicationAction() {
 
@@ -24,18 +25,21 @@ class LoginAction : UserAction.UserApplicationAction() {
                 return@Runnable
             }
 
-            val user = UserRepository(application).getUserByUsername(userName!!)
+            val user = UserRepository(application).getUserByUsername(userName!!.trim())
 
             user?.apply {
-                val resource = FlowResource(FlowResource.Status.COMPLETED)
-                resource.bundle.putParcelable(User.EXTRA_USER, user)
-                data.postValue(resource)
-                return@Runnable
+                if (AuthUtilities.isPasswordValid(password!!, this.password)) {
+                    val resource = FlowResource(FlowResource.Status.COMPLETED)
+                    resource.bundle.putParcelable(User.EXTRA_USER, user)
+                    data.postValue(resource)
+                    return@Runnable
+                } else {
+                    data.postValue(FlowResource.FailResource("The entered password is incorrect"))
+                }
             }
             data.postValue(FlowResource.FailResource("No user found with username \"$userName\""))
         })
         thread.start()
         return data
     }
-
 }

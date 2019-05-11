@@ -87,7 +87,7 @@ class RegisterFragment : LegendsFragment() {
             return
         }
 
-        val user = User(
+        val user = User(null,
             userName = userName,
             firstName = firstName,
             lastName = lastName,

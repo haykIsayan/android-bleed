@@ -6,13 +6,13 @@ import com.example.android_bleed.note.NoteListLegend
 import com.example.android_bleed.note.domain.GetNoteListAction
 import com.example.android_bleed.note.view.NoteListFragment
 import com.example.android_bleed.reminder.ReminderListFragment
-import com.example.android_bleed.reminder.ReminderListLegend
+import com.example.android_bleed.utilities.SlideAnimation
 
 class MainLegend (application: Application) : AndroidLegend(application) {
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()
-            .setRoot(MainActivity::class)
-            .setRootStep(FlowVector().launchFlow(NoteListLegend::class))
+            .setRoot(MainActivity::class, SlideAnimation())
+            .startWith(FlowVector().launchFlow(NoteListLegend::class))
 
             .addFlowVector(ACTION_OPEN_NOTE_LIST, FlowVector().transitionTo(NoteListFragment::class).execute(GetNoteListAction()))
 

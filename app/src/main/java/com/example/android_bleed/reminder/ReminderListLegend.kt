@@ -7,6 +7,6 @@ class ReminderListLegend(application: Application) : AndroidLegend(application) 
 
 
     override fun onCreateFlowGraph(): FlowGraph {
-        return FlowGraph().setRootStep(FlowVector().transitionTo(ReminderListFragment::class))
+        return FlowGraph().startWith(FlowVector().transitionTo(ReminderListFragment::class))
     }
 }

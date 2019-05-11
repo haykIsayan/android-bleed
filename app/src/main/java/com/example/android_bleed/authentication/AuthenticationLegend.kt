@@ -6,7 +6,6 @@ import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
 import com.example.android_bleed.authentication.view.RegisterFragment
-import com.example.android_bleed.main.MainActivity
 import com.example.android_bleed.main.MainLegend
 import com.example.android_bleed.utilities.SlideAnimation
 
@@ -16,7 +15,7 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
 
         return FlowGraph()
 
-            .setRootStep(
+            .startWith(
                 FlowVector()
                     .transitionTo(LoginFragment::class, true, SlideAnimation())
             )
