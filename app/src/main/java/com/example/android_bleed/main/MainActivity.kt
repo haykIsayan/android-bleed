@@ -6,6 +6,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.android_legends.view.LegendsActivity
+import com.example.android_bleed.authentication.AuthUtilities
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : LegendsActivity() {
@@ -21,6 +22,12 @@ class MainActivity : LegendsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        supportActionBar?.apply {
+            setIcon(R.drawable.notification_icon_background)
+            title = AuthUtilities.sCurrentUser?.userName
+        }
 
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)

@@ -39,7 +39,7 @@ class RegisterFragment : LegendsFragment() {
                 }
                 is RegisterAction.RegisterFlowResource -> {
                     Log.d("HAYK","COMPLETED")
-                    Toast.makeText(activity,"You have registered as" + it.bundle.getParcelable<User>(User.EXTRA_USER)?.userName, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity,"You have registered as ${it.bundle.getParcelable<User>(User.EXTRA_USER)?.userName}", Toast.LENGTH_LONG).show()
                 }
             }
         })
