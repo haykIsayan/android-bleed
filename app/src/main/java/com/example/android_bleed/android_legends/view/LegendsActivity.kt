@@ -1,6 +1,7 @@
 package com.example.android_bleed.android_legends.view
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,9 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
 
     private var mFragmentContainerId: Int = -1
 
+    companion object {
+        const val LAUNCHER_LEGEND = "Launcher.Flow"
+    }
 
     protected abstract fun getFragmentContainerId(): Int
 
@@ -33,10 +37,30 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
         setContentView(R.layout.activity_legends)
         this.mFragmentContainerId = getFragmentContainerId()
 
+        registerLauncherLegend()
+
         this.mFlowData.observe(this, this)
     }
 
+    /**
+     * UTILITY FUNCTIONS
+     */
+
     // todo/ code improvements
+
+    private fun registerLauncherLegend() {
+        val bundle = intent.extras ?: return
+        bundle.getSerializable(LAUNCHER_LEGEND)?.apply {
+            when (this) {
+                is AndroidLegend -> {
+                    executeFlow(this.javaClass.kotlin)
+                }
+            }
+        }
+    }
+
+
+    private fun <L : AndroidLegend> initAndroidLegend(flowKlass: KClass<L>) = flowKlass.constructors.first().call(application)
 
     private fun <L : AndroidLegend> registerFlow(flowKlass: KClass<L>): AndroidLegend {
         val flowName = flowKlass.java.name
@@ -44,7 +68,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
         var flow = mFlowMap[flowName]
         flow.apply {
 
-            flow = flowKlass.constructors.first().call(application)
+            flow = initAndroidLegend(flowKlass)
 
             mFlowMap[flowName] = flow!!
             mFlowData.apply {
@@ -57,8 +81,35 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
     }
 
     /**
+     * UTILITY FUNCTIONS
+     */
+
+    /**
      * PRIMARY CONTROLLER FUNCTIONS
      */
+
+
+    /**
+     * LAUNCH A BRAND NEW FLOW
+     */
+
+    fun <L : AndroidLegend> launchLegend(legendKlass: KClass<L>) {
+
+        val legend = initAndroidLegend(legendKlass)
+
+        val legendsActivityKlass = legend.getRoot()
+
+        legendsActivityKlass?.apply {
+            val intent = Intent(this@LegendsActivity, this.java)
+            val bundle = Bundle()
+            bundle.putSerializable(LAUNCHER_LEGEND, legend)
+            intent.putExtras(bundle)
+            startActivity(intent)
+            return
+        }
+        executeFlow(legendKlass)
+    }
+
 
     fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
         val flow = registerFlow(flowKlass)
@@ -85,7 +136,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
             is FlowResource.FragmentTransitionResource<*> -> executeFragmentTransition(flowResource)
             is FlowResource.ActivityTransitionResource<*> -> executeActivityTransition(flowResource)
             is FlowResource.FragmentPopResource<*> -> executeFragmentPop(flowResource)
-            is FlowLauncher.FlowLauncherResource<*> -> executeFlow(flowKlass = flowResource.flowKlass, bundle = flowResource.bundle)
+            is FlowLauncher.FlowLauncherResource<*> -> launchLegend(legendKlass = flowResource.flowKlass /*,bundle = flowResource.bundle*/)
             else -> {
                 if (flowResource.status == FlowResource.Status.COMPLETED) {
                     notifyFlowStepCompleted(flowResource.bundle, flowResource.flowName)

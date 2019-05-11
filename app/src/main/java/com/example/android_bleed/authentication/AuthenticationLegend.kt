@@ -7,6 +7,7 @@ import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
 import com.example.android_bleed.authentication.view.RegisterFragment
 import com.example.android_bleed.main.MainActivity
+import com.example.android_bleed.main.MainLegend
 import com.example.android_bleed.utilities.SlideAnimation
 
 class AuthenticationLegend(application: Application): AndroidLegend(application) {
@@ -22,13 +23,14 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
 
             .addFlowVector(
                 ACTION_LOGIN, FlowVector()
-                .execute(LoginAction())
-                .startActivity(MainActivity::class, SlideAnimation()))
+                    .execute(LoginAction())
+                    .launchFlow(MainLegend::class)
+            )
 
             .addFlowVector(
                 ACTION_REGISTER, FlowVector()
                 .execute(RegisterAction())
-                .startActivity(MainActivity::class, SlideAnimation())
+                .launchFlow(MainLegend::class)
             )
 
             .addFlowVector(

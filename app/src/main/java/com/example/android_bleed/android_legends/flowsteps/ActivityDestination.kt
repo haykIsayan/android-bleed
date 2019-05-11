@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.FlowResource
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
+import java.io.Serializable
 import kotlin.reflect.KClass
 
-class ActivityDestination <A: LegendsActivity>  (val activityKlass: KClass<A>, val customAnimation: CustomAnimation? = null ) : FlowStep() {
+class ActivityDestination <A: LegendsActivity>  (private val activityKlass: KClass<A>, val customAnimation: CustomAnimation? = null ) : FlowStep() {
     override fun execute(): LiveData<FlowResource> {
         val data = MutableLiveData<FlowResource>()
         val activityTransitionResource = FlowResource.ActivityTransitionResource(
@@ -18,4 +19,6 @@ class ActivityDestination <A: LegendsActivity>  (val activityKlass: KClass<A>, v
         data.postValue(activityTransitionResource)
         return data
     }
+
+    fun getActivityKlass() : KClass<A> = activityKlass
 }

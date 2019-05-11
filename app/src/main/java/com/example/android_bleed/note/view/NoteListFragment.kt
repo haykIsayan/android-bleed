@@ -15,6 +15,7 @@ import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.example.android_bleed.note.NoteListLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -82,7 +83,10 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
-            executeFlow(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
+//            executeFlow(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
+
+
+            (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -91,7 +95,11 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
     override fun onNoteClick(v: View?, note: Note) {
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        executeFlow(flowKlass = CreateNoteLegend::class, bundle = bundle)
+
+        // todo
+
+        (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
+
     }
 
 }
