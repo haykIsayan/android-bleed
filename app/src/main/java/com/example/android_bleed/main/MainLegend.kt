@@ -5,7 +5,8 @@ import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.note.NoteListLegend
 import com.example.android_bleed.note.domain.GetNoteListAction
 import com.example.android_bleed.note.view.NoteListFragment
-import com.example.android_bleed.reminder.ReminderListFragment
+import com.example.android_bleed.reminder.domain.GetReminderListAction
+import com.example.android_bleed.reminder.view.ReminderListFragment
 import com.example.android_bleed.utilities.SlideAnimation
 
 class MainLegend (application: Application) : AndroidLegend(application) {
@@ -16,7 +17,7 @@ class MainLegend (application: Application) : AndroidLegend(application) {
 
             .addFlowVector(ACTION_OPEN_NOTE_LIST, FlowVector().transitionTo(NoteListFragment::class).execute(GetNoteListAction()))
 
-            .addFlowVector(ACTION_OPEN_REMINDER_LIST, FlowVector().transitionTo(ReminderListFragment::class).execute(GetNoteListAction()))
+            .addFlowVector(ACTION_OPEN_REMINDER_LIST, FlowVector().transitionTo(ReminderListFragment::class).execute(GetReminderListAction()))
     }
 
     companion object {

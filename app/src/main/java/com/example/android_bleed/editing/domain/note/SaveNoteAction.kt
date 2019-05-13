@@ -1,4 +1,4 @@
-package com.example.android_bleed.editing.domain
+package com.example.android_bleed.editing.domain.note
 
 import android.app.Application
 import androidx.lifecycle.LiveData

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -34,7 +33,7 @@ class MainActivity : LegendsActivity() {
         val bundle = Bundle()
         bundle.putString(User.EXTRA_USERNAME, mCurrentUser?.userName)
 
-        executeFlow(
+        executeLegend(
             flowKlass = MainLegend::class,
             vectorTag = menuItem.title.toString(),
             bundle = bundle

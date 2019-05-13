@@ -1,10 +1,11 @@
 package com.example.android_bleed.editing
 
 import android.app.Application
-import com.example.android_bleed.editing.domain.EditNoteAction
-import com.example.android_bleed.editing.domain.SaveNoteAction
+import com.example.android_bleed.editing.domain.note.EditNoteAction
+import com.example.android_bleed.editing.domain.note.SaveNoteAction
 import com.example.android_bleed.editing.view.CreateNoteFragment
 import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.editing.view.EditingActivity
 import com.example.android_bleed.main.MainLegend
 import com.example.android_bleed.utilities.SlideAnimation
 

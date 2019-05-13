@@ -13,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.data.models.Note
-import com.example.android_bleed.android_legends.AndroidLegend
 import com.example.android_bleed.android_legends.FlowResource
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
-import com.example.android_bleed.note.NoteListLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
@@ -26,8 +24,6 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
 
     override fun getLayoutResource(): Int = R.layout.fragment_note_list
 
-    private lateinit var mNoteListLegend: AndroidLegend
-
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var rvNoteList: RecyclerView
 
@@ -35,7 +31,7 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        getFlowData().observe(this, Observer {
+        getLegendData().observe(this, Observer {
 
             when (it.status) {
                 FlowResource.Status.FAILED -> {
@@ -59,11 +55,6 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         super.onCreate(savedInstanceState)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        this.mNoteListLegend = getFlowByName(NoteListLegend::class.java.name)?:return
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,10 +74,10 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
-//            executeFlow(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
+//            executeLegend(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
 
 
-            (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
+            (activity as LegendsActivity).startLegend(CreateNoteLegend::class)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -98,7 +89,7 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
 
         // todo
 
-        (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
+        (activity as LegendsActivity).startLegend(CreateNoteLegend::class)
 
     }
 

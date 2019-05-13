@@ -31,7 +31,7 @@ class RegisterFragment : LegendsFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getFlowData().observe(this, Observer {
+        getLegendData().observe(this, Observer {
 
             when (it) {
                 is FlowResource.FailResource -> {
@@ -70,7 +70,7 @@ class RegisterFragment : LegendsFragment() {
         }
 
         btnLogin.setOnClickListener {
-            executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_LOGIN)
+            executeLegend(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_LOGIN)
         }
 
     }
@@ -96,7 +96,7 @@ class RegisterFragment : LegendsFragment() {
 
         val bundle = Bundle()
         bundle.putParcelable(User.EXTRA_USER, user)
-        executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_REGISTER, bundle = bundle)
+        executeLegend(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_REGISTER, bundle = bundle)
     }
 
 }

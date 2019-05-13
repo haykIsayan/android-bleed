@@ -16,9 +16,9 @@ class AuthActivity : LegendsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        executeFlow(flowKlass = AuthenticationLegend::class)
+        executeLegend(flowKlass = AuthenticationLegend::class)
 
-        getFlowData().observe(this, Observer {
+        getLegendData().observe(this, Observer {
             if (it.status == FlowResource.Status.COMPLETED) {
                 val user = it.bundle.getParcelable<User>(User.EXTRA_USER)
                 user?.apply {

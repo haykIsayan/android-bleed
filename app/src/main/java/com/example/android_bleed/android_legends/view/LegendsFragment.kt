@@ -27,16 +27,19 @@ abstract class LegendsFragment : Fragment() {
         return inflater.inflate(getLayoutResource(), container, false)
     }
 
-    fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>,
-                                        vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW,
-                                        bundle: Bundle = Bundle()) {
-
-        (activity as LegendsActivity).executeFlow(flowKlass, vectorTag, bundle)
+    fun <L : AndroidLegend> startLegend(legendKlass: KClass<L>) {
+        (activity as LegendsActivity).startLegend(legendKlass)
     }
 
-    fun getFlowData() = (activity as LegendsActivity).getFlowData()
+    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>,
+                                          vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW,
+                                          bundle: Bundle = Bundle()) {
 
-    fun getFlowByName(flowName: String) = (activity as LegendsActivity).getFlowByName(flowName)
+        (activity as LegendsActivity).executeLegend(flowKlass, vectorTag, bundle)
+    }
+
+    fun getLegendData() = (activity as LegendsActivity).getLegendData()
+
     abstract fun getLayoutResource(): Int
 
 }

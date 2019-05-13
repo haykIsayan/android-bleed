@@ -53,7 +53,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
         bundle.getSerializable(LAUNCHER_LEGEND)?.apply {
             when (this) {
                 is AndroidLegend -> {
-                    executeFlow(this.javaClass.kotlin)
+                    executeLegend(this.javaClass.kotlin)
                 }
             }
         }
@@ -92,7 +92,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
      * LAUNCH A BRAND NEW FLOW
      */
 
-    fun <L : AndroidLegend> launchLegend(legendKlass: KClass<L>) {
+    fun <L : AndroidLegend> startLegend(legendKlass: KClass<L>) {
         val legend = initAndroidLegend(legendKlass)
         val legendsDestination = legend.getRoot()
         legendsDestination?.apply {
@@ -108,15 +108,15 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
             }
             return
         }
-        executeFlow(legendKlass)
+        executeLegend(legendKlass)
     }
 
-    fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
+    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
         val flow = registerFlow(flowKlass)
         flow.execute(vectorTag, bundle)
     }
 
-    fun getFlowData(): LiveData<FlowResource> = mFlowData
+    fun getLegendData(): LiveData<FlowResource> = mFlowData
 
     fun getFlowByName(flowName: String) = mFlowMap[flowName]
 
@@ -136,7 +136,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
             is FlowResource.FragmentTransitionResource<*> -> executeFragmentTransition(flowResource)
             is FlowResource.ActivityTransitionResource<*> -> executeActivityTransition(flowResource)
             is FlowResource.FragmentPopResource<*> -> executeFragmentPop(flowResource)
-            is FlowLauncher.FlowLauncherResource<*> -> launchLegend(legendKlass = flowResource.flowKlass /*,bundle = flowResource.bundle*/)
+            is FlowLauncher.FlowLauncherResource<*> -> startLegend(legendKlass = flowResource.flowKlass /*,bundle = flowResource.bundle*/)
             else -> {
                 if (flowResource.status == FlowResource.Status.COMPLETED) {
                     notifyFlowStepCompleted(flowResource.bundle, flowResource.flowName)
