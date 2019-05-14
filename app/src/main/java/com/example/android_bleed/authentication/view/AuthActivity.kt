@@ -21,7 +21,7 @@ class AuthActivity : LegendsActivity() {
             title = "Welcome to Android Legends Demo"
         }
 
-        executeFlow(flowKlass = AuthenticationLegend::class)
+        executeLegend(flowKlass = AuthenticationLegend::class)
 
         getLegendData().observe(this, Observer {
             if (it.status == LegendResult.Status.COMPLETED) {
