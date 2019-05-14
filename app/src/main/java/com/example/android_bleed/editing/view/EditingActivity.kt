@@ -1,4 +1,4 @@
-package com.example.android_bleed.editing
+package com.example.android_bleed.editing.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

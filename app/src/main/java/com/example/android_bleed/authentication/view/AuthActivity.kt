@@ -6,7 +6,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthUtilities
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 
 class AuthActivity : LegendsActivity() {
@@ -16,14 +16,15 @@ class AuthActivity : LegendsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
+        executeLegend(flowKlass = AuthenticationLegend::class)
         supportActionBar?.apply {
             title = "Welcome to Android Legends Demo"
         }
 
         executeFlow(flowKlass = AuthenticationLegend::class)
 
-        getFlowData().observe(this, Observer {
-            if (it.status == FlowResource.Status.COMPLETED) {
+        getLegendData().observe(this, Observer {
+            if (it.status == LegendResult.Status.COMPLETED) {
                 val user = it.bundle.getParcelable<User>(User.EXTRA_USER)
                 user?.apply {
                     AuthUtilities.sCurrentUser = this

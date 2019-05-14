@@ -12,7 +12,7 @@ import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.editing.CreateNoteLegend
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -30,7 +30,6 @@ class CreateNoteFragment : LegendsFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mCreateNoteLegend = getFlowByName(CreateNoteLegend::class.java.name)?:return
 
     }
 
@@ -54,7 +53,7 @@ class CreateNoteFragment : LegendsFragment() {
                 saveNote(this)
                 return@setOnClickListener
             }
-            executeFlow(AuthenticationLegend::class)
+            executeLegend(AuthenticationLegend::class)
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -73,6 +72,6 @@ class CreateNoteFragment : LegendsFragment() {
         )
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
-        executeFlow(CreateNoteLegend::class, CreateNoteLegend.ACTION_SAVE_NOTE, bundle)
+        executeLegend(CreateNoteLegend::class, CreateNoteLegend.ACTION_SAVE_NOTE, bundle)
     }
 }
