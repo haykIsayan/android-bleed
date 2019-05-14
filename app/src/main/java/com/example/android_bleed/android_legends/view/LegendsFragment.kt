@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import kotlin.reflect.KClass
 
 
@@ -15,7 +15,7 @@ abstract class LegendsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val bundle = arguments ?: Bundle()
-        (activity as LegendsActivity).notifyFlowStepCompleted(bundle, bundle.getString("TAG")!!)
+        (activity as LegendsActivity).notifyFlowStepCompleted(bundle, bundle.getString(LegendsActivity.FRAGMENT_TRANSITION_BUNDLE)!!)
     }
 
     override fun onCreateView(
@@ -32,8 +32,8 @@ abstract class LegendsFragment : Fragment() {
     }
 
     fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>,
-                                          vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW,
-                                          bundle: Bundle = Bundle()) {
+                                                                                            vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW,
+                                                                                            bundle: Bundle = Bundle()) {
 
         (activity as LegendsActivity).executeLegend(flowKlass, vectorTag, bundle)
     }

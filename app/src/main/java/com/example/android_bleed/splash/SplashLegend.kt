@@ -2,7 +2,7 @@ package com.example.android_bleed.splash
 
 import android.app.Application
 import com.example.android_bleed.authentication.view.AuthActivity
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.utilities.SlideAnimation
 
 class SplashLegend(application: Application) : AndroidLegend(application) {

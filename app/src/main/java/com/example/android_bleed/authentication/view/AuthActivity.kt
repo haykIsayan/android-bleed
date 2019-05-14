@@ -6,7 +6,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthUtilities
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 
 class AuthActivity : LegendsActivity() {
@@ -19,7 +19,7 @@ class AuthActivity : LegendsActivity() {
         executeLegend(flowKlass = AuthenticationLegend::class)
 
         getLegendData().observe(this, Observer {
-            if (it.status == FlowResource.Status.COMPLETED) {
+            if (it.status == LegendResult.Status.COMPLETED) {
                 val user = it.bundle.getParcelable<User>(User.EXTRA_USER)
                 user?.apply {
                     AuthUtilities.sCurrentUser = this

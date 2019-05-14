@@ -12,7 +12,7 @@ import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.editing.CreateNoteLegend
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 

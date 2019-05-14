@@ -1,4 +1,4 @@
-package com.example.android_bleed.android_legends
+package com.example.android_bleed.android_legends.legends
 
 import android.app.Application
 

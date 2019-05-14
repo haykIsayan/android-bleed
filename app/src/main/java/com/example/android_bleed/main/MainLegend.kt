@@ -1,7 +1,7 @@
 package com.example.android_bleed.main
 
 import android.app.Application
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.note.NoteListLegend
 import com.example.android_bleed.note.domain.GetNoteListAction
 import com.example.android_bleed.note.view.NoteListFragment
@@ -13,7 +13,7 @@ class MainLegend (application: Application) : AndroidLegend(application) {
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()
             .setRoot(MainActivity::class, SlideAnimation())
-            .startWith(FlowVector().launchFlow(NoteListLegend::class))
+            .startWith(FlowVector().startLegend(NoteListLegend::class))
 
             .addFlowVector(ACTION_OPEN_NOTE_LIST, FlowVector().transitionTo(NoteListFragment::class).execute(GetNoteListAction()))
 

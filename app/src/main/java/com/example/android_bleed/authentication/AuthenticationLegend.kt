@@ -1,7 +1,7 @@
 package com.example.android_bleed.authentication
 
 import android.app.Application
-import com.example.android_bleed.android_legends.AndroidLegend
+import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.authentication.view.LoginFragment
@@ -23,13 +23,13 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
             .addFlowVector(
                 ACTION_LOGIN, FlowVector()
                     .execute(LoginAction())
-                    .launchFlow(MainLegend::class)
+                    .startLegend(MainLegend::class)
             )
 
             .addFlowVector(
                 ACTION_REGISTER, FlowVector()
                 .execute(RegisterAction())
-                .launchFlow(MainLegend::class)
+                .startLegend(MainLegend::class)
             )
 
             .addFlowVector(

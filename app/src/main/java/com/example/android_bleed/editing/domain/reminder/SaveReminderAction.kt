@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.UserAction
 import com.example.android_bleed.data.models.Reminder
 import com.example.android_bleed.data.repositories.ReminderRepository
@@ -17,8 +17,8 @@ import java.util.*
 
 class SaveReminderAction : UserAction.UserApplicationAction() {
 
-    override fun execute(application: Application): LiveData<FlowResource> {
-        val data = MutableLiveData<FlowResource>()
+    override fun execute(application: Application): LiveData<LegendResult> {
+        val data = MutableLiveData<LegendResult>()
         val thread = Thread(Runnable {
             val repository = ReminderRepository(application)
             val reminder = dataBundle.getParcelable<Reminder>(Reminder.EXTRA_REMINDER)
@@ -26,7 +26,8 @@ class SaveReminderAction : UserAction.UserApplicationAction() {
                 repository.createReminder(reminder)
                 setNotification(reminder, application)
 
-                val flowResource = FlowResource(FlowResource.Status.COMPLETED)
+                val flowResource =
+                    LegendResult(LegendResult.Status.COMPLETED)
                 flowResource.bundle.putParcelable(Reminder.EXTRA_REMINDER, reminder)
                 data.postValue(flowResource)
                 return@Runnable

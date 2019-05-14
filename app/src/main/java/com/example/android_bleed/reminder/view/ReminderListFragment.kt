@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.example.android_bleed.editing.CreateReminderLegend
 import com.example.android_bleed.reminder.domain.GetReminderListAction
-import com.example.android_bleed.reminder.view.ReminderAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -38,7 +36,7 @@ class ReminderListFragment : LegendsFragment() {
                     Toast.makeText(activity, "${it.reminderList.size}", Toast.LENGTH_LONG).show()
                     mReminderAdapter.setReminderList(it.reminderList)
                 }
-                is FlowResource.FailResource -> {
+                is LegendResult.FailResource -> {
                     Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
                 }
             }

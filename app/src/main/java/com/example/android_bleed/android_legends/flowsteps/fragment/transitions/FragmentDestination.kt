@@ -4,7 +4,7 @@ import androidx.annotation.TransitionRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.FlowStep
 import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnimation
 import kotlin.reflect.KClass
@@ -14,10 +14,10 @@ class FragmentDestination<F : Fragment> (val fragmentKlass: KClass<F>,
                                          val addToBackStack: Boolean = true,
                                          val fragmentAnimation: FragmentAnimation? = null) : FlowStep() {
 
-    override fun execute(): LiveData<FlowResource> {
-        val data = MutableLiveData<FlowResource>()
+    override fun execute(): LiveData<LegendResult> {
+        val data = MutableLiveData<LegendResult>()
 
-        val fragmentTransitionResource = FlowResource.FragmentTransitionResource(
+        val fragmentTransitionResource = LegendResult.FragmentTransitionResource(
             fragmentKlass = fragmentKlass
             , enterAnimationId = enterAnimationId,
             addToBackStack = addToBackStack,

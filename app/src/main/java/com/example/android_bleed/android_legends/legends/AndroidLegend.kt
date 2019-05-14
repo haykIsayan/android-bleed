@@ -1,11 +1,11 @@
-package com.example.android_bleed.android_legends
+package com.example.android_bleed.android_legends.legends
 
 import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.room.Ignore
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.*
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnimation
@@ -14,19 +14,18 @@ import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import java.io.Serializable
-import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 
 abstract class AndroidLegend(@Transient private val mApplication: Application) : Serializable{
 
     private val mFlowName = this::class.java.name
     @Transient
-    private lateinit var mFlowGraph: FlowGraph
+    protected lateinit var mFlowGraph: FlowGraph
     @Transient
     private lateinit var mCurrentVectorIterator: FlowVectorIterator
 
     @Transient
-    private var mFlowData = MediatorLiveData<FlowResource>()
+    private var mFlowData = MediatorLiveData<LegendResult>()
 
 
     companion object {
@@ -37,19 +36,24 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
         onCreateFlow()
     }
 
-    private fun onCreateFlow() {
+    protected fun onCreateFlow() {
         mFlowGraph = onCreateFlowGraph()
     }
 
-    protected abstract fun onCreateFlowGraph(): FlowGraph
+    protected open fun onCreateFlowGraph(): FlowGraph = FlowGraph()
 
     /**
-     * Main Controller Functions
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * ////////////////////////////////////////// CONTROLLER FUNCTIONS /////////////////////////////////////////////////
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      */
 
-    fun launch(bundle: Bundle = Bundle()) {
-        val flowVector = mFlowGraph.getFlowVector(ACTION_LAUNCH_FLOW)?:return
-        invokeFlowVector(flowVector, bundle)
+    fun startWith(flowVector: FlowVector) {
+        mFlowGraph.startWith(flowVector)
     }
 
     fun execute(vectorTag: String, bundle: Bundle) {
@@ -100,7 +104,7 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
      * ACCESSIBILITY FUNCTIONS
      */
 
-    fun getFlowData(): LiveData<FlowResource> = mFlowData
+    fun getFlowData(): LiveData<LegendResult> = mFlowData
 
     fun getRoot() = mFlowGraph.getRoot()
 
@@ -115,16 +119,17 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
      * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      */
 
-    protected class FlowGraph {
+    class FlowGraph {
 
         private val mFlowVectorMap = mutableMapOf<String, FlowVector>()
 
         fun startWith(flowVector: FlowVector) = apply {
-            mFlowVectorMap[AndroidLegend.ACTION_LAUNCH_FLOW] = flowVector
+            mFlowVectorMap[ACTION_LAUNCH_FLOW] = flowVector
         }
 
         fun <L : LegendsActivity> setRoot(activityKlass : KClass<L>, customAnimation: CustomAnimation? = null) = apply {
-            mFlowVectorMap[ACTION_LAUNCH_ROOT] = FlowVector().startActivity(activityKlass = activityKlass, customAnimation = customAnimation)
+            mFlowVectorMap[ACTION_LAUNCH_ROOT] = FlowVector()
+                .startActivity(activityKlass = activityKlass, customAnimation = customAnimation)
         }
 
         fun addFlowVector(stepTag: String, flowVector: FlowVector) = apply { mFlowVectorMap[stepTag] = flowVector }
@@ -138,13 +143,8 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
     class FlowVector {
         private val mFlowStepList = mutableListOf<FlowStep>()
 
-
         fun <A : LegendsActivity> startActivity(activityKlass: KClass<A>, customAnimation: CustomAnimation? = null) = apply {
             mFlowStepList.add(ActivityDestination(activityKlass = activityKlass, customAnimation = customAnimation))
-        }
-
-        fun <A: LegendsActivity> startActivityForResult(activityKlass: KClass<A>) = apply {
-
         }
 
         fun <F : Fragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true,
@@ -173,11 +173,15 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
                 )
             }
 
-        fun <F : AndroidLegend> launchFlow(flowKlass: KClass<F>) =
+        fun <F : AndroidLegend> startLegend(flowKlass: KClass<F>) =
                 apply {
-                    this.mFlowStepList.add(FlowLauncher(flowKlass = flowKlass))
+                    this.mFlowStepList.add(LegendStarter(flowKlass = flowKlass))
                 }
 
+        fun startLegend(flowGraph: FlowGraph) =
+                apply {
+                    this.mFlowStepList.add(LambdaStarter(flowGraph))
+                }
 
         fun getStepList() = this.mFlowStepList
     }
@@ -191,7 +195,5 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
             mFlowVector.getStepList()[mFlowStepCounter]
         }
     }
-
-    data class LegendLauncher<A : AndroidLegend> (val androidLegendKlass: KClass<A>): Serializable
 
 }

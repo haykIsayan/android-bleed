@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
 
 
@@ -27,7 +27,7 @@ class LoginFragment : LegendsFragment() {
         super.onCreate(savedInstanceState)
         getLegendData().observe(this, Observer {
             when (it) {
-                is FlowResource.FailResource -> Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
+                is LegendResult.FailResource -> Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
             }
         })
     }

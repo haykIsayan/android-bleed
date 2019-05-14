@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.data.models.Note
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,19 +34,19 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         getLegendData().observe(this, Observer {
 
             when (it.status) {
-                FlowResource.Status.FAILED -> {
+                LegendResult.Status.FAILED -> {
 
                     // todo start empty state
 
                     Toast.makeText(activity, "THIS BITCH EMPTY", Toast.LENGTH_SHORT).show()
                 }
-                FlowResource.Status.COMPLETED -> {
+                LegendResult.Status.COMPLETED -> {
                     val noteList: ArrayList<Note> = it.bundle.getParcelableArrayList(Note.EXTRA_NOTE_LIST) ?: return@Observer
 
                     Toast.makeText(activity, noteList.size.toString(), Toast.LENGTH_SHORT).show()
                     mNoteListAdapter.setNoteList(noteList)
                 }
-                FlowResource.Status.PENDING -> {
+                LegendResult.Status.PENDING -> {
                     Toast.makeText(activity, "LOADING", Toast.LENGTH_SHORT).show()
                 }
             }

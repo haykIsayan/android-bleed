@@ -3,7 +3,7 @@ package com.example.android_bleed.reminder.domain
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.UserAction
 import com.example.android_bleed.authentication.AuthUtilities
 import com.example.android_bleed.data.models.Note
@@ -13,9 +13,9 @@ import com.example.android_bleed.data.repositories.ReminderRepository
 class GetReminderListAction : UserAction.UserApplicationAction() {
 
 
-    override fun execute(application: Application): LiveData<FlowResource> {
+    override fun execute(application: Application): LiveData<LegendResult> {
 
-        val data = MutableLiveData<FlowResource>()
+        val data = MutableLiveData<LegendResult>()
 
         val thread = Thread(Runnable {
 
@@ -31,7 +31,7 @@ class GetReminderListAction : UserAction.UserApplicationAction() {
                 data.postValue(flowResource)
                 return@Runnable
             }
-            data.postValue(FlowResource.fail("SHIT"))
+            data.postValue(LegendResult.fail("SHIT"))
         })
         thread.start()
         return data
@@ -39,5 +39,5 @@ class GetReminderListAction : UserAction.UserApplicationAction() {
 
     }
 
-    class GetRemindersResult(val reminderList: List<Reminder>) : FlowResource(status = Status.COMPLETED)
+    class GetRemindersResult(val reminderList: List<Reminder>) : LegendResult(status = Status.COMPLETED)
 }

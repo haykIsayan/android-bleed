@@ -99,17 +99,6 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
 
 
     private fun saveReminder(user: User) {
-//
-//        val calendar = Calendar.getInstance()
-//        val day = calendar.get(Calendar.DAY_OF_MONTH)
-//        val month = calendar.get(Calendar.MONTH)
-//        val year = calendar.get(Calendar.YEAR)
-//
-//        val reminderDate = "$year/$month/$day"
-//        val reminderTime = "${calendar.get(Calendar.HOUR_OF_DAY)} : ${calendar.get(Calendar.MINUTE)}"
-//        val reminder = Reminder(null, etReminderMessage.text.toString(), reminderDate, reminderTime, user.userName)
-
-
 
         mCurrentReminder.authorName = user.userName
         mCurrentReminder.reminderDate = DateFormat.getInstance().format(Calendar.getInstance().time)

@@ -13,7 +13,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
 
 
@@ -34,10 +34,10 @@ class RegisterFragment : LegendsFragment() {
         getLegendData().observe(this, Observer {
 
             when (it) {
-                is FlowResource.FailResource -> {
+                is LegendResult.FailResource -> {
                     Toast.makeText(activity, it.failMessage, Toast.LENGTH_SHORT).show()
                 }
-                is RegisterAction.RegisterFlowResource -> {
+                is RegisterAction.RegisterLegendResult -> {
                     Log.d("HAYK","COMPLETED")
                     Toast.makeText(activity,"You have registered as" + it.bundle.getParcelable<User>(User.EXTRA_USER)?.userName, Toast.LENGTH_LONG).show()
                 }
