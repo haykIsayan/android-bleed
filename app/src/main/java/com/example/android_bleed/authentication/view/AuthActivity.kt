@@ -17,6 +17,11 @@ class AuthActivity : LegendsActivity() {
         setContentView(R.layout.activity_auth)
 
         executeLegend(flowKlass = AuthenticationLegend::class)
+        supportActionBar?.apply {
+            title = "Welcome to Android Legends Demo"
+        }
+
+        executeLegend(flowKlass = AuthenticationLegend::class)
 
         getLegendData().observe(this, Observer {
             if (it.status == LegendResult.Status.COMPLETED) {

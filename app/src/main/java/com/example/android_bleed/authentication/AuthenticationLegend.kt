@@ -17,7 +17,7 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
 
             .startWith(
                 FlowVector()
-                    .transitionTo(LoginFragment::class, true, SlideAnimation())
+                    .transitionTo(LoginFragment::class, true)
             )
 
             .addFlowVector(

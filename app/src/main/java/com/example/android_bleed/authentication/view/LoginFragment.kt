@@ -13,6 +13,7 @@ import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
+import com.example.android_bleed.authentication.AuthUtilities
 
 
 class LoginFragment : LegendsFragment() {
@@ -28,6 +29,11 @@ class LoginFragment : LegendsFragment() {
         getLegendData().observe(this, Observer {
             when (it) {
                 is LegendResult.FailResource -> Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
+                else -> {
+                    if (it.status == LegendResult.Status.COMPLETED) {
+                        Toast.makeText(activity, "Welcome ${AuthUtilities.sCurrentUser?.userName}!", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         })
     }
