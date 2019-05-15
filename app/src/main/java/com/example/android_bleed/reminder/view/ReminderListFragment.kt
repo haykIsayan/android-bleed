@@ -13,6 +13,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.example.android_bleed.editing.CreateReminderLegend
+import com.example.android_bleed.main.MainActivity
 import com.example.android_bleed.reminder.domain.GetReminderListAction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -41,6 +42,17 @@ class ReminderListFragment : LegendsFragment() {
                 }
             }
         })
+
+
+        activity?.actionBar?.apply {
+            subtitle = "My Reminders"
+        }
+
+
+
+
+        (activity as MainActivity).selectBottomNavigation(R.id.menu_reminder_list)
+
     }
 
     override fun onCreateView(

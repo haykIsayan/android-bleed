@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/tv_note_title_item_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="Note Title: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_margin="10dp"/>
+
+        <TextView
+                android:id="@+id/tv_note_date_item_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="5/15/2019"
+                android:layout_margin="10dp"
+                android:textSize="16sp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-            android:id="@+id/et_note_title_item_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Note Title: "
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:layout_margin="10dp"/>
-
-    <View android:layout_width="300dp" android:layout_height="1dp"
-          android:layout_gravity="center_horizontal"
-          android:background="@android:drawable/divider_horizontal_bright"/>
-
-    <TextView
-            android:id="@+id/et_note_text_item_note"
+            android:id="@+id/tv_note_text_item_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Note Text: "
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:layout_margin="15dp"/>
 
 </LinearLayout>

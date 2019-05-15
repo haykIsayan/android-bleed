@@ -2,11 +2,14 @@ package com.example.android_bleed.main
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import androidx.annotation.IdRes
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.authentication.AuthUtilities
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : LegendsActivity() {
 
@@ -31,8 +34,17 @@ class MainActivity : LegendsActivity() {
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
+
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
+        }
+    }
+
+    fun selectBottomNavigation(@IdRes menuItemId: Int) {
+        if (bnvMainNavigation.selectedItemId == menuItemId) return
+        when (menuItemId) {
+            R.id.menu_note_list -> bnvMainNavigation.menu.getItem(0).isChecked = true
+            R.id.menu_reminder_list ->  bnvMainNavigation.menu.getItem(1).isChecked = true
         }
     }
 

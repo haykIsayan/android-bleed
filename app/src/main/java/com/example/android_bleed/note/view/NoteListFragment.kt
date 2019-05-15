@@ -16,6 +16,7 @@ import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
+import com.example.android_bleed.main.MainActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
@@ -51,6 +52,12 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
                 }
             }
         })
+
+        activity?.actionBar?.apply {
+            subtitle = "My Notes"
+        }
+
+        (activity as MainActivity).selectBottomNavigation(R.id.menu_note_list)
 
         super.onCreate(savedInstanceState)
     }
