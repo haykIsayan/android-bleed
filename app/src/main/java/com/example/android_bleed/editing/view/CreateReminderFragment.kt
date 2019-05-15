@@ -20,7 +20,6 @@ import com.example.android_bleed.editing.CreateReminderLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.DateFormat
 import java.util.*
-import java.text.SimpleDateFormat
 
 
 class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
@@ -32,7 +31,7 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
     private lateinit var btnSelectedDate: Button
     private lateinit var btnSelectedTime: Button
 
-    private val mCurrentReminder = Reminder(null, "","", "","")
+    private val mCalendar = Calendar.getInstance()
 
     private lateinit var fabSaveReminder: FloatingActionButton
 
@@ -75,56 +74,61 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
     }
 
     private fun setCurrentTime() {
-        val c = Calendar.getInstance()
-        btnSelectedDate.text = "${c.get(Calendar.YEAR)} ${c.get(Calendar.MONTH)} ${c.get(Calendar.DAY_OF_MONTH)}"
+        btnSelectedDate.text = DateFormat.getInstance().format(mCalendar.time)
+        btnSelectedTime.text = DateFormat.getInstance().format(mCalendar.time)
     }
 
     private fun openDatePicker() {
-        val calendar = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
             activity,
             this,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+            mCalendar.get(Calendar.YEAR),
+            mCalendar.get(Calendar.MONTH),
+            mCalendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
     }
 
     private fun openTimePicker() {
-        val date = Date()
-        val timePickerDialog = TimePickerDialog(activity, this, date.hours, date.minutes, true)
+        val timePickerDialog = TimePickerDialog(
+            activity, this,
+            mCalendar.get(Calendar.HOUR_OF_DAY),
+            mCalendar.get(Calendar.MINUTE),
+            true)
         timePickerDialog.show()
     }
 
 
     private fun saveReminder(user: User) {
+        val reminder = Reminder(
+            null,
+            etReminderMessage.text.toString(),
+            btnSelectedDate.text.toString(),
+            "",
+            user.userName,
+            mCalendar.timeInMillis
+        )
 
-        mCurrentReminder.authorName = user.userName
-        mCurrentReminder.reminderDate = DateFormat.getInstance().format(Calendar.getInstance().time)
-        mCurrentReminder.reminderMessage = etReminderMessage.text.toString()
         val bundle = Bundle()
-        bundle.putParcelable(Reminder.EXTRA_REMINDER, mCurrentReminder)
+        bundle.putParcelable(Reminder.EXTRA_REMINDER, reminder)
 
         executeLegend(CreateReminderLegend::class, CreateReminderLegend.ACTION_SAVE_REMINDER, bundle)
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.SECOND, 0)
-        mCurrentReminder.reminderTime = "$hourOfDay:$minute:0"
-        btnSelectedTime.text = mCurrentReminder.reminderTime
+        mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        mCalendar.set(Calendar.MINUTE, minute)
+        mCalendar.set(Calendar.SECOND, 0)
+
+        setCurrentTime()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        calendar.set(Calendar.MONTH, month)
-        calendar.set(Calendar.YEAR, year)
-        mCurrentReminder.reminderDate = DateFormat.getInstance().format(calendar)
-        btnSelectedDate.text = mCurrentReminder.reminderDate
+        mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        mCalendar.set(Calendar.MONTH, month)
+        mCalendar.set(Calendar.YEAR, year)
+
+        setCurrentTime()
     }
 
 }

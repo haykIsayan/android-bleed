@@ -12,20 +12,23 @@ class Reminder(
     @PrimaryKey(autoGenerate = true)
     val reminderId: Int? = null,
     @ColumnInfo(name = "reminder_message")
-    var reminderMessage: String,
+    val reminderMessage: String,
     @ColumnInfo(name = "reminder_date")
-    var reminderDate: String,
+    val reminderDate: String,
     @ColumnInfo(name = "reminder_time")
-    var reminderTime: String,
+    val reminderTime: String,
     @ColumnInfo(name = "author_name")
-    var authorName: String
+    val authorName: String,
+    @ColumnInfo(name = "long_date")
+    val longDate: Long
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readLong()
     ) {
     }
 
@@ -35,6 +38,7 @@ class Reminder(
         parcel.writeString(reminderDate)
         parcel.writeString(reminderTime)
         parcel.writeString(authorName)
+        parcel.writeLong(longDate)
     }
 
     override fun describeContents(): Int {
