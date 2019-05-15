@@ -32,12 +32,22 @@ class NoteListAdapter(private val noteList: ArrayList<Note>, private val onNoteC
     }
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvNoteTitle: TextView = itemView.findViewById(R.id.et_note_title_item_note)
-        private val tvNoteText: TextView = itemView.findViewById(R.id.et_note_text_item_note)
+        private val tvNoteTitle: TextView = itemView.findViewById(R.id.tv_note_title_item_note)
+        private val tvNoteText: TextView = itemView.findViewById(R.id.tv_note_text_item_note)
+        private val tvNoteDate: TextView = itemView.findViewById(R.id.tv_note_date_item_note)
 
         fun bind(note: Note) {
             tvNoteTitle.text = note.title
-            tvNoteText.text = note.text
+
+            val noteText = note.text
+
+            tvNoteText.text = if (noteText.length > 15) {
+                "${note.text.subSequence(0, 15)}..."
+            } else {
+                noteText
+            }
+
+            tvNoteDate.text = note.date
         }
     }
 

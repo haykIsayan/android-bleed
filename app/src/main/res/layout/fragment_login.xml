@@ -50,6 +50,7 @@
         <EditText
                 android:id="@+id/et_password_fragment_login"
                 android:hint="password"
+                android:inputType="textPassword"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

@@ -17,7 +17,13 @@
             android:id="@+id/bnv_nav_view_activity_main"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/colorPrimaryDark"
             app:menu="@menu/menu_main_bottom_nav"
+            app:itemIconTint="@android:color/white"
+            app:itemTextColor="@android:color/white"
+            android:foregroundGravity="top"
+            app:labelVisibilityMode="selected"
+            android:defaultFocusHighlightEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

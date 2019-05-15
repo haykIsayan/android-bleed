@@ -15,6 +15,8 @@ import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.DateFormat
+import java.util.*
 
 class CreateNoteFragment : LegendsFragment() {
 
@@ -25,13 +27,6 @@ class CreateNoteFragment : LegendsFragment() {
     private lateinit var etNoteText: EditText
     private lateinit var fabSaveNote: FloatingActionButton
 
-    private lateinit var mCreateNoteLegend: AndroidLegend
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,11 +60,14 @@ class CreateNoteFragment : LegendsFragment() {
             Toast.makeText(activity, "Please provide a title and a text for the note", Toast.LENGTH_LONG).show()
             return
         }
+
         val note = Note(null,
             authorUsername = user.userName,
             title = etNoteTitle.text.toString(),
-            text = etNoteText.text.toString()
+            text = etNoteText.text.toString(),
+            date = DateFormat.getInstance().format(Calendar.getInstance().time)
         )
+
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
         executeLegend(CreateNoteLegend::class, CreateNoteLegend.ACTION_SAVE_NOTE, bundle)
