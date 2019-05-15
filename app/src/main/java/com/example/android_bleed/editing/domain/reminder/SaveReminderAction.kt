@@ -13,7 +13,6 @@ import com.example.android_bleed.android_legends.flowsteps.UserAction
 import com.example.android_bleed.data.models.Reminder
 import com.example.android_bleed.data.repositories.ReminderRepository
 import com.example.android_bleed.utilities.ReminderAlarmReceiver
-import java.util.*
 
 class SaveReminderAction : UserAction.UserApplicationAction() {
 
@@ -38,7 +37,6 @@ class SaveReminderAction : UserAction.UserApplicationAction() {
     }
 
     private fun setNotification(reminder: Reminder, application: Application) {
-        val calendar = Calendar.getInstance()
         val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(application, ReminderAlarmReceiver::class.java)
@@ -48,7 +46,7 @@ class SaveReminderAction : UserAction.UserApplicationAction() {
         val pendingIntent = PendingIntent.getBroadcast(application,0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminder.longDate, pendingIntent)
         }
     }
 }

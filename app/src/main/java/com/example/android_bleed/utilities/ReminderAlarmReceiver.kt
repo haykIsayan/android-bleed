@@ -36,7 +36,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
                 val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 createNotificationChannel(notificationManager)
                 val builder = Notification.Builder(context)
-                builder.setSmallIcon(android.R.drawable.ic_dialog_info)
+                builder.setSmallIcon(android.R.drawable.ic_popup_reminder)
                     .setContentIntent(pendingIntent)
                     .setContentText(reminder.reminderMessage)
                     .setContentTitle("Hey ${reminder.authorName}!")
