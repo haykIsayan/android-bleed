@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-android:background="@drawable/rounded_bg_white">
+              android:layout_height="600dp"
+              android:background="@drawable/rounded_bg_white">
 
     <TextView
             android:id="@+id/tv_note_title_layout_note_preview_dialog"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:textSize="30sp"
-    android:hint="title"/>
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_margin="10dp"
+            android:hint="title"/>
+
+    <TextView
+            android:id="@+id/tv_note_date_layout_note_preview_dialog"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginLeft="14dp"
+            android:hint="date"/>
+
+
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="10dp"
+          android:background="@android:color/darker_gray"/>
 
     <TextView
             android:id="@+id/tv_note_text_layout_note_preview_dialog"
-            android:textSize="30sp"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:textStyle="italic"
+            android:layout_margin="20dp"
             android:hint="text"
             android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 

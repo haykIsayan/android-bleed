@@ -11,7 +11,13 @@ class NotePreviewLegend(application: Application) : AndroidLegend(application) {
         return FlowGraph()
             .startWith(FlowVector().openDialog(NotePreviewDialogFragment::class))
 
-            .addFlowVector(ACTION_DELETE_NOTE, FlowVector().execute(DeleteNoteAction()).dismissDialog(NotePreviewDialogFragment::class).startLegend(NoteListLegend::class))
+            .addFlowVector(
+                ACTION_DELETE_NOTE,
+                FlowVector()
+                    .execute(DeleteNoteAction())
+                    .dismissDialog(NotePreviewDialogFragment::class)
+                    .startLegend(NoteListLegend::class)
+            )
     }
 
     companion object {

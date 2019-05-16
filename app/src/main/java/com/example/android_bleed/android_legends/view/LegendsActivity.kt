@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
@@ -109,10 +110,15 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
      */
 
     private fun <L : AndroidLegend> processLegend(legend: AndroidLegend, legendKlass: KClass<L>? = null, bundle: Bundle) {
+
         val legendsDestination = legend.getRoot()
+
         legendsDestination?.apply {
             when (this) {
                 is ActivityDestination<*> -> {
+
+                    if (this.getActivityKlass() == this@LegendsActivity::class) return@apply
+
                     val resource =
                         LegendResult.ActivityTransitionResource(this.getActivityKlass(), this.customAnimation)
                     resource.bundle = bundle
@@ -214,7 +220,23 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
             }
         }
 
-        val fragment = fragmentTransitionResource.fragmentKlass.primaryConstructor?.call() ?: return
+        val fragmentKlass = fragmentTransitionResource.fragmentKlass
+        val forceRecreate = fragmentTransitionResource.forceRecreate
+
+        /**
+         * Either create instance or find fragment by tag
+         */
+
+        val fragment = if (forceRecreate) {
+            fragmentKlass.constructors.first().call()
+        } else {
+            supportFragmentManager.findFragmentByTag(fragmentKlass.java.name) ?: fragmentKlass.constructors.first().call()
+        }
+
+        /**
+         * Commit fragment
+         */
+
         val bundle = fragmentTransitionResource.bundle
         bundle.putString(FRAGMENT_TRANSITION_BUNDLE, fragmentTransitionResource.flowName)
         // ADD FLOW STEP ARGUMENT
@@ -225,7 +247,6 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
                 fragmentTransitionResource.fragmentKlass.java.name
             } else null
         )
-
         fragmentTransaction.replace(mFragmentContainerId, fragment).commit()
     }
 
@@ -248,13 +269,17 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
         val bundle = dialogOpenerResult.bundle
         bundle.putString(DIALOG_FRAGMENT_TRANSITION_BUNDLE, dialogOpenerResult.flowName)
         legendsDialog.arguments = bundle
-        legendsDialog.show(supportFragmentManager, legendsDialog.javaClass.name)
+        val transaction =  supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        legendsDialog.show(transaction, legendsDialog.javaClass.name)
     }
 
     private fun executeDismissDialog(dialogDismissResult: DialogDismisser.DialogDismissResult<*>) {
         val legendsDialog = supportFragmentManager.findFragmentByTag(dialogDismissResult.dialogKlass.java.name)
         when (legendsDialog) {
-            is LegendsDialogFragment -> legendsDialog.dismiss()
+            is LegendsDialogFragment -> {
+                legendsDialog.dismiss()
+            }
         }
     }
 }

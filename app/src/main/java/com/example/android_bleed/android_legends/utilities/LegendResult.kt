@@ -24,6 +24,7 @@ open class LegendResult (val status: Status = Status.PENDING,
     data class FragmentTransitionResource<F : Fragment> (val fragmentKlass: KClass<F>,
                                                          @TransitionRes val enterAnimationId: Int = -1,
                                                          val addToBackStack: Boolean = true,
+                                                         val forceRecreate: Boolean = false,
                                                          val fragmentAnimation: FragmentAnimation? = null): LegendResult(
         Status.COMPLETED
     )

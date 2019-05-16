@@ -2,11 +2,8 @@ package com.example.android_bleed.note.view
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import com.example.android_bleed.R
 import com.example.android_bleed.android_legends.view.LegendsDialogFragment
@@ -17,14 +14,15 @@ import com.example.android_bleed.note.NotePreviewLegend
 class NotePreviewDialogFragment : LegendsDialogFragment() {
 
     private lateinit var tvNoteTitle: TextView
-    private lateinit var tvNoteTextView: TextView
+    private lateinit var tvNoteText: TextView
+    private lateinit var tvNoteDate: TextView
     private lateinit var mNote: Note
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
 
 
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity!!)
 
         val inflater = LayoutInflater.from(activity)
         val layout = inflater.inflate(R.layout.layout_note_preview_dialog, null)
@@ -44,9 +42,11 @@ class NotePreviewDialogFragment : LegendsDialogFragment() {
             }
 
         tvNoteTitle = layout.findViewById(R.id.tv_note_title_layout_note_preview_dialog)
-        tvNoteTextView = layout.findViewById(R.id.tv_note_text_layout_note_preview_dialog)
+        tvNoteText = layout.findViewById(R.id.tv_note_text_layout_note_preview_dialog)
+        tvNoteDate = layout.findViewById(R.id.tv_note_date_layout_note_preview_dialog)
         tvNoteTitle.text = mNote.title
-        tvNoteTextView.text = mNote.text
+        tvNoteText.text = mNote.text
+        tvNoteDate.text = mNote.date
 
         return builder.create()
     }

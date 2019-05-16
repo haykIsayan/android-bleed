@@ -69,7 +69,7 @@ class CreateNoteFragment : LegendsFragment() {
             authorUsername = user.userName,
             title = etNoteTitle.text.toString(),
             text = etNoteText.text.toString(),
-            date = DateFormat.getInstance().format(Calendar.getInstance().time)
+            date = DateFormat.getInstance().format(Calendar.getInstance().time).split(" ")[0]
         )
 
         val bundle = Bundle()

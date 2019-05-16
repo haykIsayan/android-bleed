@@ -29,9 +29,7 @@ class LoginAction : UserAction.UserApplicationAction() {
 
             user?.apply {
                 if (AuthUtilities.isPasswordValid(password!!, this.password)) {
-                    val resource =
-                        LegendResult(LegendResult.Status.COMPLETED)
-                    resource.bundle.putParcelable(User.EXTRA_USER, user)
+                    val resource = LoginResult(user)
                     data.postValue(resource)
                     return@Runnable
                 } else {
@@ -43,4 +41,7 @@ class LoginAction : UserAction.UserApplicationAction() {
         thread.start()
         return data
     }
+
+
+    data class LoginResult(val user: User) : LegendResult(Status.COMPLETED)
 }

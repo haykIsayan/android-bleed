@@ -24,21 +24,16 @@ class RegisterAction : UserAction.UserApplicationAction() {
 
             repository.registerUser(user = user)
 
-            val registerResource = RegisterLegendResult(LegendResult.Status.COMPLETED)
-            registerResource.bundle.putParcelable(User.EXTRA_USER, user)
+            val registerResult = RegisterResult(user)
+            registerResult.bundle.putParcelable(User.EXTRA_USER, user)
 
-            data.postValue(registerResource)
+            data.postValue(registerResult)
 
         })
         thread.start()
         return data
     }
 
-    class RegisterLegendResult(status: Status) : LegendResult(status) {
-
-    }
-
-
-
+    data class RegisterResult(val user: User) : LegendResult(Status.COMPLETED)
 
 }

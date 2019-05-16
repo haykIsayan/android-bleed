@@ -43,6 +43,14 @@ abstract class LegendsFragment : Fragment() {
         (activity as LegendsActivity).executeLegend(flowKlass, vectorTag, bundle)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (activity?.supportFragmentManager?.backStackEntryCount == 0) {
+            activity?.finish()
+        }
+    }
+
+
     fun getLegendData() = (activity as LegendsActivity).getLegendData()
 
     abstract fun getLayoutResource(): Int

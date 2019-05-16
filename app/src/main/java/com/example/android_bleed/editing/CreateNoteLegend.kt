@@ -10,13 +10,14 @@ import com.example.android_bleed.main.MainActivity
 import com.example.android_bleed.main.MainLegend
 import com.example.android_bleed.note.domain.GetNoteListAction
 import com.example.android_bleed.note.view.NoteListFragment
-import com.example.android_bleed.utilities.SlideAnimation
+import com.example.android_bleed.utilities.SlideRightAnimation
+import com.example.android_bleed.utilities.SlideUpAnimation
 
 class CreateNoteLegend (application: Application) : AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()
-            .setRoot(EditingActivity::class, SlideAnimation())
+            .setRoot(EditingActivity::class, SlideUpAnimation())
 
             .startWith(FlowVector().transitionTo(CreateNoteFragment::class, false))
 

@@ -153,12 +153,14 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
          */
 
         fun <F : LegendsFragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true,
+                                               forceRecreate: Boolean = false,
                                         fragmentAnimation: FragmentAnimation? = null) =
             apply {
                 mFlowStepList.add(
                     FragmentDestination(
                         fragmentKlass = fragmentKlass,
                         addToBackStack = addToBackStack,
+                        forceRecreate = forceRecreate,
                         fragmentAnimation = fragmentAnimation
                     )
                 )
