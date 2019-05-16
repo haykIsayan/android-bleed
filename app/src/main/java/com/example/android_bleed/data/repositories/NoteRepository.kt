@@ -13,4 +13,6 @@ class NoteRepository(val context: Context) {
 
     fun editNote(note: Note) = NoteDatabase.getDatabase(context = context)?.noteDao()?.updateNote(note)
 
+    fun deleteNote(note: Note) = NoteDatabase.getDatabase(context = context)?.noteDao()?.deleteNote(note)
+
 }

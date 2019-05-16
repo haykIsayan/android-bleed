@@ -11,6 +11,8 @@ import com.example.android_bleed.R
 import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.ActivityDestination
+import com.example.android_bleed.android_legends.flowsteps.DialogDismisser
+import com.example.android_bleed.android_legends.flowsteps.DialogOpener
 import com.example.android_bleed.android_legends.flowsteps.LegendStarter
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
 import com.example.android_bleed.android_legends.legends.LambdaLegend
@@ -30,6 +32,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
 
     companion object {
         const val FRAGMENT_TRANSITION_BUNDLE = "Fragment.Transition.Bundle"
+        const val DIALOG_FRAGMENT_TRANSITION_BUNDLE = "Dialog.Fragment.Transition.Bundle"
     }
 
     protected abstract fun getFragmentContainerId(): Int
@@ -56,7 +59,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
         val starterLegend = CurrentLegendManager.sCurrentLegend
         starterLegend?.apply {
             registerLegend(legend = starterLegend)
-            starterLegend.execute(AndroidLegend.ACTION_LAUNCH_FLOW, bundle ?: Bundle())
+            starterLegend.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
         }
     }
 
@@ -96,7 +99,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
      * EXECUTE A SPECIFIC FLOW VECTOR OF THE GIVEN LEGEND
      */
 
-    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
+    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_START_LEGEND, bundle: Bundle = Bundle()) {
         val flow = registerAndGetLegend(flowKlass)
         flow.execute(vectorTag, bundle)
     }
@@ -121,7 +124,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
             return
         }
         legendKlass?.apply {
-            executeLegend(legendKlass)
+            executeLegend(legendKlass, bundle = bundle)
         }
     }
 
@@ -139,6 +142,8 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
             is LegendResult.FragmentPopResource<*> -> executeFragmentPop(legendResult)
             is LegendStarter.LegendStarterResult<*> -> startLegend(legendKlass = legendResult.flowKlass)
             is LegendResult.LambdaStarterResult -> executeStartLambda(legendResult.flowGraph)
+            is DialogOpener.DialogOpenerResult<*> -> executeOpenDialog(legendResult)
+            is DialogDismisser.DialogDismissResult<*> -> executeDismissDialog(legendResult)
             else -> {
                 if (legendResult.status == LegendResult.Status.COMPLETED) {
                     notifyFlowStepCompleted(legendResult.bundle, legendResult.flowName)
@@ -236,5 +241,20 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
     private fun executeStartLambda(flowGraph: AndroidLegend.FlowGraph, bundle: Bundle = Bundle()) {
         val lambdaLegend = LambdaLegend(application, flowGraph)
         processLegend<LambdaLegend>(lambdaLegend, bundle = bundle)
+    }
+
+    private fun executeOpenDialog(dialogOpenerResult: DialogOpener.DialogOpenerResult<*>) {
+        val legendsDialog = dialogOpenerResult.dialogKlass.constructors.first().call()
+        val bundle = dialogOpenerResult.bundle
+        bundle.putString(DIALOG_FRAGMENT_TRANSITION_BUNDLE, dialogOpenerResult.flowName)
+        legendsDialog.arguments = bundle
+        legendsDialog.show(supportFragmentManager, legendsDialog.javaClass.name)
+    }
+
+    private fun executeDismissDialog(dialogDismissResult: DialogDismisser.DialogDismissResult<*>) {
+        val legendsDialog = supportFragmentManager.findFragmentByTag(dialogDismissResult.dialogKlass.java.name)
+        when (legendsDialog) {
+            is LegendsDialogFragment -> legendsDialog.dismiss()
+        }
     }
 }

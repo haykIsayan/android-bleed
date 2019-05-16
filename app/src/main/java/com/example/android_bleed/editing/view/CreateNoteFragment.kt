@@ -43,6 +43,10 @@ class CreateNoteFragment : LegendsFragment() {
         this.etNoteText = view.findViewById(R.id.et_note_text_fragment_create_note)
         this.fabSaveNote = view.findViewById(R.id.fab_save_note_fragment_create_note)
 
+
+
+
+
         this.fabSaveNote.setOnClickListener {
             AuthUtilities.sCurrentUser?.apply {
                 saveNote(this)
