@@ -18,27 +18,22 @@ class RegisterAction : UserAction.UserApplicationAction() {
             val user = dataBundle.getParcelable<User>(User.EXTRA_USER)
 
             if (user == null) {
-                data.postValue(LegendResult.FailResource("A user was not provided"))
+                data.postValue(LegendResult.FailResult("A user was not provided"))
                 return@Runnable
             }
 
             repository.registerUser(user = user)
 
-            val registerResource = RegisterLegendResult(LegendResult.Status.COMPLETED)
-            registerResource.bundle.putParcelable(User.EXTRA_USER, user)
+            val registerResult = RegisterResult(user)
+            registerResult.bundle.putParcelable(User.EXTRA_USER, user)
 
-            data.postValue(registerResource)
+            data.postValue(registerResult)
 
         })
         thread.start()
         return data
     }
 
-    class RegisterLegendResult(status: Status) : LegendResult(status) {
-
-    }
-
-
-
+    data class RegisterResult(val user: User) : LegendResult(Status.COMPLETED)
 
 }

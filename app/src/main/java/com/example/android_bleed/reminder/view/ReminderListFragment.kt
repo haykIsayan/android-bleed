@@ -37,7 +37,7 @@ class ReminderListFragment : LegendsFragment() {
                     Toast.makeText(activity, "${it.reminderList.size}", Toast.LENGTH_LONG).show()
                     mReminderAdapter.setReminderList(it.reminderList)
                 }
-                is LegendResult.FailResource -> {
+                is LegendResult.FailResult -> {
                     Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
                 }
             }

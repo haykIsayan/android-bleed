@@ -12,6 +12,7 @@ import kotlin.reflect.KClass
 class FragmentDestination<F : Fragment> (val fragmentKlass: KClass<F>,
                                          @TransitionRes val enterAnimationId: Int = -1,
                                          val addToBackStack: Boolean = true,
+                                         val forceRecreate: Boolean = false,
                                          val fragmentAnimation: FragmentAnimation? = null) : FlowStep() {
 
     override fun execute(): LiveData<LegendResult> {
@@ -21,6 +22,7 @@ class FragmentDestination<F : Fragment> (val fragmentKlass: KClass<F>,
             fragmentKlass = fragmentKlass
             , enterAnimationId = enterAnimationId,
             addToBackStack = addToBackStack,
+            forceRecreate = forceRecreate,
             fragmentAnimation = fragmentAnimation
         )
 

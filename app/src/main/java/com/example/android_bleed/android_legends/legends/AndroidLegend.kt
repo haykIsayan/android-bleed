@@ -12,6 +12,7 @@ import com.example.android_bleed.android_legends.flowsteps.fragment.FragmentAnim
 import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.FragmentDestination
 import com.example.android_bleed.android_legends.flowsteps.fragment.transitions.FragmentPop
 import com.example.android_bleed.android_legends.view.LegendsActivity
+import com.example.android_bleed.android_legends.view.LegendsDialogFragment
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import java.io.Serializable
 import kotlin.reflect.KClass
@@ -30,7 +31,7 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
 
     companion object {
         const val ACTION_LAUNCH_ROOT = "Action.Launch.Root"
-        const val ACTION_LAUNCH_FLOW = "Action.Launch.Flow" }
+        const val ACTION_START_LEGEND = "Action.Launch.Flow" }
 
     init {
         onCreateFlow()
@@ -124,7 +125,7 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
         private val mFlowVectorMap = mutableMapOf<String, FlowVector>()
 
         fun startWith(flowVector: FlowVector) = apply {
-            mFlowVectorMap[ACTION_LAUNCH_FLOW] = flowVector
+            mFlowVectorMap[ACTION_START_LEGEND] = flowVector
         }
 
         fun <L : LegendsActivity> setRoot(activityKlass : KClass<L>, customAnimation: CustomAnimation? = null) = apply {
@@ -147,22 +148,36 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
             mFlowStepList.add(ActivityDestination(activityKlass = activityKlass, customAnimation = customAnimation))
         }
 
-        fun <F : Fragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true,
+        /**
+         * Used to transition to the given Fragment inheriting from LegendsFragment
+         */
+
+        fun <F : LegendsFragment> transitionTo(fragmentKlass: KClass<F>, addToBackStack : Boolean = true,
+                                               forceRecreate: Boolean = false,
                                         fragmentAnimation: FragmentAnimation? = null) =
             apply {
                 mFlowStepList.add(
                     FragmentDestination(
                         fragmentKlass = fragmentKlass,
                         addToBackStack = addToBackStack,
+                        forceRecreate = forceRecreate,
                         fragmentAnimation = fragmentAnimation
                     )
                 )
             }
 
+        /**
+         * Used to execute the given UserAction
+         */
+
         fun execute(userAction: UserAction) =
             apply {
                 mFlowStepList.add(userAction)
             }
+
+        /**
+         * Used to pop the given Fragment inheriting from LegendsFragment
+         */
 
         fun <F : LegendsFragment> popBack(fragmentKlass: KClass<F>? = null) =
             apply {
@@ -173,14 +188,36 @@ abstract class AndroidLegend(@Transient private val mApplication: Application) :
                 )
             }
 
-        fun <F : AndroidLegend> startLegend(flowKlass: KClass<F>) =
+        /**
+         * Used to start a class inheriting from AndroidLegends
+         */
+
+        fun <F : AndroidLegend> startLegend(legendKlass: KClass<F>) =
                 apply {
-                    this.mFlowStepList.add(LegendStarter(flowKlass = flowKlass))
+                    this.mFlowStepList.add(LegendStarter(flowKlass = legendKlass))
                 }
+
+        /**
+         * Used to start a LambdaLegend with the given FlowGraph
+         */
 
         fun startLegend(flowGraph: FlowGraph) =
                 apply {
                     this.mFlowStepList.add(LambdaStarter(flowGraph))
+                }
+
+        /**
+         * Used to open a Dialog inheriting from LegendsDialogFragment
+         */
+
+        fun <D : LegendsDialogFragment> openDialog(dialogKlass: KClass<D>) =
+                apply {
+                    this.mFlowStepList.add(DialogOpener(dialogKlass))
+                }
+
+        fun <D : LegendsDialogFragment> dismissDialog(dialogKlass: KClass<D>) =
+                apply {
+                    this.mFlowStepList.add(DialogOpener(dialogKlass))
                 }
 
         fun getStepList() = this.mFlowStepList

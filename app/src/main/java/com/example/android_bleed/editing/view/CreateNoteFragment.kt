@@ -43,6 +43,10 @@ class CreateNoteFragment : LegendsFragment() {
         this.etNoteText = view.findViewById(R.id.et_note_text_fragment_create_note)
         this.fabSaveNote = view.findViewById(R.id.fab_save_note_fragment_create_note)
 
+
+
+
+
         this.fabSaveNote.setOnClickListener {
             AuthUtilities.sCurrentUser?.apply {
                 saveNote(this)
@@ -65,7 +69,7 @@ class CreateNoteFragment : LegendsFragment() {
             authorUsername = user.userName,
             title = etNoteTitle.text.toString(),
             text = etNoteText.text.toString(),
-            date = DateFormat.getInstance().format(Calendar.getInstance().time)
+            date = DateFormat.getInstance().format(Calendar.getInstance().time).split(" ")[0]
         )
 
         val bundle = Bundle()

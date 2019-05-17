@@ -28,24 +28,6 @@ class RegisterFragment : LegendsFragment() {
     private lateinit var btnRegister: Button
     private lateinit var btnLogin: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        getLegendData().observe(this, Observer {
-
-            when (it) {
-                is LegendResult.FailResource -> {
-                    Toast.makeText(activity, it.failMessage, Toast.LENGTH_SHORT).show()
-                }
-                is RegisterAction.RegisterLegendResult -> {
-                    Log.d("HAYK","COMPLETED")
-                    Toast.makeText(activity,"You have registered as ${it.bundle.getParcelable<User>(User.EXTRA_USER)?.userName}", Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

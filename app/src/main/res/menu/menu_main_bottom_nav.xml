@@ -3,12 +3,20 @@
 
     <item
             android:id="@+id/menu_note_list"
-            android:icon="@android:drawable/ic_menu_edit"
+            android:icon="@mipmap/baseline_edit_white_18dp"
+            android:iconTint="@android:color/white"
             android:title="My Notes"/>
 
     <item
             android:id="@+id/menu_reminder_list"
-            android:icon="@android:drawable/ic_popup_reminder"
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:iconTint="@android:color/white"
             android:title="My Reminders"/>
+
+    <item
+        android:id="@+id/menu_app_settings"
+        android:icon="@mipmap/baseline_person_white_18dp"
+        android:iconTint="@android:color/white"
+        android:title="Profile"/>
 
 </menu>

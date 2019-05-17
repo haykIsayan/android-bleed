@@ -17,6 +17,7 @@ import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
 import com.example.android_bleed.main.MainActivity
+import com.example.android_bleed.note.NotePreviewLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
@@ -53,11 +54,9 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
             }
         })
 
-        activity?.actionBar?.apply {
-            subtitle = "My Notes"
-        }
-
-        (activity as MainActivity).selectBottomNavigation(R.id.menu_note_list)
+        val mainActivity = (activity as MainActivity)
+        mainActivity.selectBottomNavigation(R.id.menu_note_list)
+        mainActivity.setSubTitle("My Notes")
 
         super.onCreate(savedInstanceState)
     }
@@ -77,14 +76,11 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         mNoteListAdapter = NoteListAdapter(ArrayList(), this)
         rvNoteList.adapter = mNoteListAdapter
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
-        rvNoteList.addItemDecoration(itemDeclaration)
+//        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
+//        rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
-//            executeLegend(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
-
-
-            (activity as LegendsActivity).startLegend(CreateNoteLegend::class)
+            startLegend(CreateNoteLegend::class)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -94,10 +90,7 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
 
-        // todo
-
-        (activity as LegendsActivity).startLegend(CreateNoteLegend::class)
-
+        startLegend(NotePreviewLegend::class, bundle = bundle)
     }
 
 }

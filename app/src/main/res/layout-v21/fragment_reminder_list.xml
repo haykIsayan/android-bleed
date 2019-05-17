@@ -20,7 +20,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:backgroundTint="@android:color/holo_orange_dark"
             android:layout_margin="16dp"
-            android:src="@android:drawable/ic_menu_today"
+            android:src="@android:drawable/ic_popup_reminder"
             app:fabSize="normal"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

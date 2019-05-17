@@ -4,20 +4,22 @@ import android.app.Application
 import com.example.android_bleed.android_legends.legends.AndroidLegend
 import com.example.android_bleed.authentication.domain.LoginAction
 import com.example.android_bleed.authentication.domain.RegisterAction
+import com.example.android_bleed.authentication.view.AuthActivity
 import com.example.android_bleed.authentication.view.LoginFragment
 import com.example.android_bleed.authentication.view.RegisterFragment
 import com.example.android_bleed.main.MainLegend
-import com.example.android_bleed.utilities.SlideAnimation
+import com.example.android_bleed.utilities.SlideLeftAnimation
+import com.example.android_bleed.utilities.SlideRightAnimation
 
 class AuthenticationLegend(application: Application): AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph {
-
         return FlowGraph()
+            .setRoot(AuthActivity::class, SlideLeftAnimation())
 
             .startWith(
                 FlowVector()
-                    .transitionTo(LoginFragment::class, true)
+                    .transitionTo(LoginFragment::class, false)
             )
 
             .addFlowVector(
@@ -34,12 +36,12 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
 
             .addFlowVector(
                 ACTION_GOTO_REGISTER, FlowVector()
-                    .transitionTo(RegisterFragment::class, true, SlideAnimation())
+                    .transitionTo(RegisterFragment::class, false,  fragmentAnimation = SlideRightAnimation())
             )
 
             .addFlowVector(
                 ACTION_GOTO_LOGIN, FlowVector()
-                    .transitionTo(LoginFragment::class, true, SlideAnimation())
+                    .transitionTo(LoginFragment::class, false, fragmentAnimation = SlideLeftAnimation())
             )
     }
 

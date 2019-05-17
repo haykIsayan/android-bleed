@@ -15,7 +15,10 @@ abstract class LegendsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val bundle = arguments ?: Bundle()
-        (activity as LegendsActivity).notifyFlowStepCompleted(bundle, bundle.getString(LegendsActivity.FRAGMENT_TRANSITION_BUNDLE)!!)
+        (activity as LegendsActivity).notifyFlowStepCompleted(
+            bundle,
+            bundle.getString(LegendsActivity.FRAGMENT_TRANSITION_BUNDLE)!!
+        )
     }
 
     override fun onCreateView(
@@ -27,16 +30,26 @@ abstract class LegendsFragment : Fragment() {
         return inflater.inflate(getLayoutResource(), container, false)
     }
 
-    fun <L : AndroidLegend> startLegend(legendKlass: KClass<L>) {
-        (activity as LegendsActivity).startLegend(legendKlass)
+    fun <L : AndroidLegend> startLegend(legendKlass: KClass<L>, bundle: Bundle = Bundle()) {
+        (activity as LegendsActivity).startLegend(legendKlass, bundle)
     }
 
-    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>,
-                                                                                            vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW,
-                                                                                            bundle: Bundle = Bundle()) {
+    fun <L : AndroidLegend> executeLegend(
+        flowKlass: KClass<L>,
+        vectorTag: String = AndroidLegend.ACTION_START_LEGEND,
+        bundle: Bundle = Bundle()
+    ) {
 
         (activity as LegendsActivity).executeLegend(flowKlass, vectorTag, bundle)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (activity?.supportFragmentManager?.backStackEntryCount == 0) {
+            activity?.finish()
+        }
+    }
+
 
     fun getLegendData() = (activity as LegendsActivity).getLegendData()
 
