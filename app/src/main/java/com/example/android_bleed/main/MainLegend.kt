@@ -20,21 +20,21 @@ class MainLegend (application: Application) : AndroidLegend(application) {
             .addFlowVector(
                 ACTION_OPEN_NOTE_LIST,
                 FlowVector()
-                    .transitionTo(NoteListFragment::class, false, fragmentAnimation = SlideLeftAnimation())
+                    .transitionTo(NoteListFragment::class, false)
                     .execute(GetNoteListAction())
             )
 
             .addFlowVector(
                 ACTION_OPEN_REMINDER_LIST,
                 FlowVector()
-                    .transitionTo(ReminderListFragment::class, false, fragmentAnimation = SlideRightAnimation())
+                    .transitionTo(ReminderListFragment::class, false)
                     .execute(GetReminderListAction())
             )
 
             .addFlowVector(
                 ACTION_OPEN_PROFILE,
                 FlowVector()
-                    .transitionTo(SettingsFragment::class, false, fragmentAnimation = SlideRightAnimation())
+                    .transitionTo(SettingsFragment::class, false)
                     .execute(GetReminderListAction())
             )
     }

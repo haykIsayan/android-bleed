@@ -76,8 +76,8 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         mNoteListAdapter = NoteListAdapter(ArrayList(), this)
         rvNoteList.adapter = mNoteListAdapter
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
-        rvNoteList.addItemDecoration(itemDeclaration)
+//        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
+//        rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
             startLegend(CreateNoteLegend::class)

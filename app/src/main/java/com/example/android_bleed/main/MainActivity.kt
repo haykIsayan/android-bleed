@@ -27,10 +27,11 @@ class MainActivity : LegendsActivity() {
 
         supportActionBar?.apply {
             this.title = AuthUtilities.sCurrentUser?.userName
-            this.setLogo(R.mipmap.baseline_person_white_18dp)
+            elevation = 15F
+            this.setLogo(R.mipmap.baseline_edit_white_18dp)
         }
 
-        this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
+        this.bnvMainNavigation = this.findViewById(R.id.bnv_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
 
@@ -54,7 +55,7 @@ class MainActivity : LegendsActivity() {
     private fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val bundle = Bundle()
         bundle.putString(User.EXTRA_USERNAME, mCurrentUser?.userName)
-
+        
         executeLegend(
             flowKlass = MainLegend::class,
             vectorTag = menuItem.title.toString(),

@@ -35,10 +35,11 @@ class NotePreviewDialogFragment : LegendsDialogFragment() {
                 startLegend(CreateNoteLegend::class, bundleNote())
             }
             .setNegativeButton("Delete Note") {dialog, which ->
+
+
+
+
                 executeLegend(NotePreviewLegend::class, NotePreviewLegend.ACTION_DELETE_NOTE, bundleNote())
-            }
-            .setNeutralButton("Close") { dialog, which ->
-                // close dialog
             }
 
         tvNoteTitle = layout.findViewById(R.id.tv_note_title_layout_note_preview_dialog)
