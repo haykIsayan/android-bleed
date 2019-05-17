@@ -54,11 +54,9 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
             }
         })
 
-        activity?.actionBar?.apply {
-            subtitle = "My Notes"
-        }
-
-        (activity as MainActivity).selectBottomNavigation(R.id.menu_note_list)
+        val mainActivity = (activity as MainActivity)
+        mainActivity.selectBottomNavigation(R.id.menu_note_list)
+        mainActivity.setSubTitle("My Notes")
 
         super.onCreate(savedInstanceState)
     }

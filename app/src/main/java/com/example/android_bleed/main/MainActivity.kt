@@ -2,14 +2,12 @@ package com.example.android_bleed.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.annotation.IdRes
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.authentication.AuthUtilities
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : LegendsActivity() {
 
@@ -25,10 +23,11 @@ class MainActivity : LegendsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(findViewById(R.id.tb_action_bar_activity_main))
 
         supportActionBar?.apply {
-            setIcon(R.drawable.notification_icon_background)
-            title = AuthUtilities.sCurrentUser?.userName
+            this.title = AuthUtilities.sCurrentUser?.userName
+            this.setLogo(R.mipmap.baseline_person_white_18dp)
         }
 
         this.bnvMainNavigation = findViewById(R.id.bnv_nav_view_activity_main)
@@ -38,6 +37,10 @@ class MainActivity : LegendsActivity() {
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
         }
+    }
+
+    fun setSubTitle(subtitle: String) {
+        supportActionBar?.subtitle = subtitle
     }
 
     fun selectBottomNavigation(@IdRes menuItemId: Int) {

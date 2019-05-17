@@ -18,7 +18,7 @@ open class LegendResult (val status: Status = Status.PENDING,
 
     companion object {
         fun fail(failMessage: String = "") =
-            FailResource(failMessage)
+            FailResult(failMessage)
     }
 
     data class FragmentTransitionResource<F : Fragment> (val fragmentKlass: KClass<F>,
@@ -41,7 +41,7 @@ open class LegendResult (val status: Status = Status.PENDING,
         Status.COMPLETED
     )
 
-    data class FailResource(val failMessage: String = "") : LegendResult(
+    data class FailResult(val failMessage: String = "") : LegendResult(
         Status.FAILED
     )
 

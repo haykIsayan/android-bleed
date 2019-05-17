@@ -16,6 +16,7 @@ class AuthenticationLegend(application: Application): AndroidLegend(application)
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()
             .setRoot(AuthActivity::class, SlideLeftAnimation())
+
             .startWith(
                 FlowVector()
                     .transitionTo(LoginFragment::class, false)

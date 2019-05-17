@@ -21,7 +21,7 @@ class LoginAction : UserAction.UserApplicationAction() {
             val password = dataBundle.getString(User.EXTRA_PASSWORD)
 
             if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
-                data.postValue(LegendResult.FailResource("Please provide a username and a password"))
+                data.postValue(LegendResult.FailResult("Please provide a username and a password"))
                 return@Runnable
             }
 
@@ -33,10 +33,10 @@ class LoginAction : UserAction.UserApplicationAction() {
                     data.postValue(resource)
                     return@Runnable
                 } else {
-                    data.postValue(LegendResult.FailResource("The entered password is incorrect"))
+                    data.postValue(LegendResult.FailResult("The entered password is incorrect"))
                 }
             }
-            data.postValue(LegendResult.FailResource("No user found with username \"$userName\""))
+            data.postValue(LegendResult.FailResult("No user found with username \"$userName\""))
         })
         thread.start()
         return data

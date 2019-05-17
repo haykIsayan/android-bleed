@@ -18,7 +18,7 @@ class RegisterAction : UserAction.UserApplicationAction() {
             val user = dataBundle.getParcelable<User>(User.EXTRA_USER)
 
             if (user == null) {
-                data.postValue(LegendResult.FailResource("A user was not provided"))
+                data.postValue(LegendResult.FailResult("A user was not provided"))
                 return@Runnable
             }
 

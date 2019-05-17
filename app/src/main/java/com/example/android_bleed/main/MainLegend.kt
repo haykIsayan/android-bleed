@@ -10,7 +10,6 @@ import com.example.android_bleed.reminder.view.ReminderListFragment
 import com.example.android_bleed.settings.SettingsFragment
 import com.example.android_bleed.utilities.SlideLeftAnimation
 import com.example.android_bleed.utilities.SlideRightAnimation
-import com.example.android_bleed.utilities.SlideUpAnimation
 
 class MainLegend (application: Application) : AndroidLegend(application) {
     override fun onCreateFlowGraph(): FlowGraph {
@@ -43,6 +42,6 @@ class MainLegend (application: Application) : AndroidLegend(application) {
     companion object {
         const val ACTION_OPEN_NOTE_LIST = "My Notes"
         const val ACTION_OPEN_REMINDER_LIST = "My Reminders"
-        const val ACTION_OPEN_PROFILE = "Settings"
+        const val ACTION_OPEN_PROFILE = "Profile"
     }
 }

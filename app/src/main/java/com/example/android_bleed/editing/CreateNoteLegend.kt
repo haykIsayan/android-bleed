@@ -17,7 +17,7 @@ class CreateNoteLegend (application: Application) : AndroidLegend(application) {
 
     override fun onCreateFlowGraph(): FlowGraph {
         return FlowGraph()
-            .setRoot(EditingActivity::class, SlideUpAnimation())
+            .setRoot(EditingActivity::class, SlideRightAnimation())
 
             .startWith(FlowVector().transitionTo(CreateNoteFragment::class, false))
 

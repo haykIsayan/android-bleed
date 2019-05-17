@@ -3,7 +3,7 @@
 
     <item
             android:id="@+id/menu_note_list"
-            android:icon="@android:drawable/ic_menu_info_details"
+            android:icon="@mipmap/baseline_edit_white_18dp"
             android:iconTint="@android:color/white"
             android:title="My Notes"/>
 
@@ -15,8 +15,8 @@
 
     <item
         android:id="@+id/menu_app_settings"
-        android:icon="@android:drawable/ic_menu_info_details"
+        android:icon="@mipmap/baseline_person_white_18dp"
         android:iconTint="@android:color/white"
-        android:title="Settings"/>
+        android:title="Profile"/>
 
 </menu>

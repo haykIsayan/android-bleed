@@ -29,7 +29,7 @@ class GetNoteListAction : UserAction.UserApplicationAction() {
                 data.postValue(flowResource)
                 return@Runnable
             }
-            data.postValue(LegendResult.FailResource())
+            data.postValue(LegendResult.FailResult())
         })
         thread.start()
         return data
