@@ -1,24 +1,26 @@
-package com.example.android_bleed.editing.domain
+package com.example.android_bleed.note.domain
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android_bleed.android_legends.flowsteps.UserAction
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.data.models.Note
 import com.example.android_bleed.data.repositories.NoteRepository
-import com.example.android_bleed.android_legends.FlowResource
-import com.example.android_bleed.android_legends.flowsteps.UserAction
 
-class SaveNoteAction : UserAction.UserApplicationAction() {
+class DeleteNoteAction : UserAction.UserApplicationAction() {
+    override fun execute(application: Application): LiveData<LegendResult> {
 
-    override fun execute(application: Application): LiveData<FlowResource> {
-        val data = MutableLiveData<FlowResource>()
+        val data = MutableLiveData<LegendResult>()
         val thread = Thread(Runnable {
             val repository = NoteRepository(application)
             val note = dataBundle.getParcelable<Note>(Note.EXTRA_NOTE)
             note?.apply {
-                repository.createNote(note)
-                val flowResource = FlowResource(FlowResource.Status.COMPLETED)
-                flowResource.bundle.putParcelable(Note.EXTRA_NOTE, note)
+                repository.deleteNote(note)
+
+                val flowResource =
+                    LegendResult(LegendResult.Status.COMPLETED)
+
                 data.postValue(flowResource)
                 return@Runnable
             }
@@ -26,5 +28,4 @@ class SaveNoteAction : UserAction.UserApplicationAction() {
         thread.start()
         return data
     }
-
 }

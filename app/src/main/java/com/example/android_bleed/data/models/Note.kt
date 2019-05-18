@@ -15,11 +15,14 @@ class Note (
     @ColumnInfo(name = "title")
     val title: String = "",
     @ColumnInfo(name = "text")
-    val text: String = ""
+    val text: String = "",
+    @ColumnInfo(name = "date")
+    val date: String
 
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString()
@@ -31,6 +34,7 @@ class Note (
         parcel.writeString(authorUsername)
         parcel.writeString(title)
         parcel.writeString(text)
+        parcel.writeString(date)
     }
 
     override fun describeContents(): Int {

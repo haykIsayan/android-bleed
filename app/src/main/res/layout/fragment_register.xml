@@ -4,58 +4,99 @@
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
+                                                   android:background="@color/colorPrimaryDark"
                                                    tools:context=".authentication.view.RegisterFragment">
 
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="Join us"
+            android:fontFamily="serif-monospace"
+            android:textSize="30sp"
+            android:paddingTop="120dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
     <LinearLayout
+            android:id="@+id/container"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_bg_white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="90dp"
             android:orientation="vertical">
 
         <EditText
                 android:id="@+id/et_username_fragment_register"
-                android:layout_width="300dp" android:layout_height="60dp"
-                android:layout_margin="10dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
                 android:hint="enter username"/>
 
         <EditText
                 android:id="@+id/et_firstname_fragment_register"
-                android:layout_width="300dp" android:layout_height="60dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_gravity="center"
                 android:hint="enter firstname"/>
 
 
         <EditText
                 android:id="@+id/et_lastname_fragment_register"
-                android:layout_width="300dp" android:layout_height="60dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_gravity="center"
                 android:hint="enter lastname"/>
 
         <EditText
                 android:id="@+id/et_password_fragment_register"
-                android:layout_width="300dp" android:layout_height="60dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_gravity="center"
                 android:hint="enter password"
                 android:inputType="textPassword"/>
 
         <Button
                 android:id="@+id/btn_register_fragment_register"
-                android:layout_width="300dp" android:layout_height="60dp"
-                android:layout_margin="10dp"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
                 android:text="Register"
                 android:textColor="@android:color/white"
-                android:background="@android:color/holo_blue_light"/>
+                android:background="@drawable/rounded_bg_red"/>
 
         <Button
                 android:id="@+id/btn_login_fragment_register"
-                android:layout_width="300dp" android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_width="300dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
                 android:text="Login"
                 android:textColor="@android:color/white"
-                android:background="@android:color/darker_gray"/>
+                android:background="@drawable/rounded_bg_grey"/>
 
 
     </LinearLayout>

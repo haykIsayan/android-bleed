@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.editing.CreateNoteLegend
 import com.example.android_bleed.data.models.Note
-import com.example.android_bleed.android_legends.AndroidLegend
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.android_legends.view.LegendsFragment
-import com.example.android_bleed.note.NoteListLegend
+import com.example.android_bleed.main.MainActivity
+import com.example.android_bleed.note.NotePreviewLegend
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.collections.ArrayList
 
@@ -26,8 +26,6 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
 
     override fun getLayoutResource(): Int = R.layout.fragment_note_list
 
-    private lateinit var mNoteListLegend: AndroidLegend
-
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var rvNoteList: RecyclerView
 
@@ -35,33 +33,32 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        getFlowData().observe(this, Observer {
+        getLegendData().observe(this, Observer {
 
             when (it.status) {
-                FlowResource.Status.FAILED -> {
+                LegendResult.Status.FAILED -> {
 
                     // todo start empty state
 
                     Toast.makeText(activity, "THIS BITCH EMPTY", Toast.LENGTH_SHORT).show()
                 }
-                FlowResource.Status.COMPLETED -> {
+                LegendResult.Status.COMPLETED -> {
                     val noteList: ArrayList<Note> = it.bundle.getParcelableArrayList(Note.EXTRA_NOTE_LIST) ?: return@Observer
 
                     Toast.makeText(activity, noteList.size.toString(), Toast.LENGTH_SHORT).show()
                     mNoteListAdapter.setNoteList(noteList)
                 }
-                FlowResource.Status.PENDING -> {
+                LegendResult.Status.PENDING -> {
                     Toast.makeText(activity, "LOADING", Toast.LENGTH_SHORT).show()
                 }
             }
         })
 
-        super.onCreate(savedInstanceState)
-    }
+        val mainActivity = (activity as MainActivity)
+        mainActivity.selectBottomNavigation(R.id.menu_note_list)
+        mainActivity.setSubTitle("My Notes")
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        this.mNoteListLegend = getFlowByName(NoteListLegend::class.java.name)?:return
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -79,14 +76,11 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         mNoteListAdapter = NoteListAdapter(ArrayList(), this)
         rvNoteList.adapter = mNoteListAdapter
         rvNoteList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
-        rvNoteList.addItemDecoration(itemDeclaration)
+//        val itemDeclaration = DividerItemDecoration(activity, RecyclerView.VERTICAL)
+//        rvNoteList.addItemDecoration(itemDeclaration)
 
         fabAddNote.setOnClickListener {
-//            executeFlow(NoteListLegend::class, NoteListLegend.ACTION_LAUNCH_CREATE_FLOW)
-
-
-            (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
+            startLegend(CreateNoteLegend::class)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -96,10 +90,7 @@ class NoteListFragment : LegendsFragment(), NoteListAdapter.OnNoteClickListener 
         val bundle = Bundle()
         bundle.putParcelable(Note.EXTRA_NOTE, note)
 
-        // todo
-
-        (activity as LegendsActivity).launchLegend(CreateNoteLegend::class)
-
+        startLegend(NotePreviewLegend::class, bundle = bundle)
     }
 
 }

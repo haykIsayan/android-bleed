@@ -4,30 +4,36 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.example.android_bleed.R
-import com.example.android_bleed.android_legends.AndroidLegend
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.legends.AndroidLegend
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.ActivityDestination
-import com.example.android_bleed.android_legends.flowsteps.FlowLauncher
+import com.example.android_bleed.android_legends.flowsteps.DialogDismisser
+import com.example.android_bleed.android_legends.flowsteps.DialogOpener
+import com.example.android_bleed.android_legends.flowsteps.LegendStarter
 import com.example.android_bleed.android_legends.flowsteps.fragment.CustomAnimation
+import com.example.android_bleed.android_legends.legends.LambdaLegend
+import com.example.android_bleed.android_legends.utilities.CurrentLegendManager
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
+abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
 
     private val mFlowMap = mutableMapOf<String, AndroidLegend>()
 
-    private val mFlowData = MediatorLiveData<FlowResource>()
+    private val mFlowData = MediatorLiveData<LegendResult>()
 
     private var mFragmentContainerId: Int = -1
 
     companion object {
-        const val LAUNCHER_LEGEND = "Launcher.Flow"
+        const val FRAGMENT_TRANSITION_BUNDLE = "Fragment.Transition.Bundle"
+        const val DIALOG_FRAGMENT_TRANSITION_BUNDLE = "Dialog.Fragment.Transition.Bundle"
     }
 
     protected abstract fun getFragmentContainerId(): Int
@@ -49,104 +55,111 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
     // todo/ code improvements
 
     private fun registerLauncherLegend() {
-        val bundle = intent.extras ?: return
-        bundle.getSerializable(LAUNCHER_LEGEND)?.apply {
-            when (this) {
-                is AndroidLegend -> {
-                    executeFlow(this.javaClass.kotlin)
-                }
-            }
+        val bundle = intent.extras
+
+        val starterLegend = CurrentLegendManager.sCurrentLegend
+        starterLegend?.apply {
+            registerLegend(legend = starterLegend)
+            starterLegend.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
         }
     }
 
     private fun <L : AndroidLegend> initAndroidLegend(flowKlass: KClass<L>) = flowKlass.constructors.first().call(application)
 
-    private fun <L : AndroidLegend> registerFlow(flowKlass: KClass<L>): AndroidLegend {
+    private fun <L : AndroidLegend> registerAndGetLegend(flowKlass: KClass<L>): AndroidLegend {
         val flowName = flowKlass.java.name
 
         var flow = mFlowMap[flowName]
         flow.apply {
 
             flow = initAndroidLegend(flowKlass)
-
-            mFlowMap[flowName] = flow!!
-            mFlowData.apply {
-                addSource(flow!!.getFlowData()) {
-                    this.value = it
-                }
-            }
+            registerLegend(flow!!)
         }
         return flow!!
+    }
+
+    private fun registerLegend(legend: AndroidLegend) {
+        mFlowMap[legend::class.java.name] = legend
+        mFlowData.apply {
+            addSource(legend.getFlowData()) {
+                this.value = it
+            }
+        }
+    }
+
+    /**
+     * START A NEW LEGEND FROM ITS ROOT
+     */
+
+    fun <L : AndroidLegend> startLegend(legendKlass: KClass<L>, bundle: Bundle = Bundle()) {
+        val legend = initAndroidLegend(legendKlass)
+        processLegend(legend, legendKlass, bundle)
+    }
+
+    /**
+     * EXECUTE A SPECIFIC FLOW VECTOR OF THE GIVEN LEGEND
+     */
+
+    fun <L : AndroidLegend> executeLegend(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_START_LEGEND, bundle: Bundle = Bundle()) {
+        val flow = registerAndGetLegend(flowKlass)
+        flow.execute(vectorTag, bundle)
     }
 
     /**
      * UTILITY FUNCTIONS
      */
 
-    /**
-     * PRIMARY CONTROLLER FUNCTIONS
-     */
+    private fun <L : AndroidLegend> processLegend(legend: AndroidLegend, legendKlass: KClass<L>? = null, bundle: Bundle) {
 
-
-    /**
-     * LAUNCH A BRAND NEW FLOW
-     */
-
-    fun <L : AndroidLegend> launchLegend(legendKlass: KClass<L>) {
-        val legend = initAndroidLegend(legendKlass)
         val legendsDestination = legend.getRoot()
+
         legendsDestination?.apply {
             when (this) {
                 is ActivityDestination<*> -> {
+
+                    if (this.getActivityKlass() == this@LegendsActivity::class) return@apply
+
                     val resource =
-                        FlowResource.ActivityTransitionResource(this.getActivityKlass(), this.customAnimation)
-                    val bundle = Bundle()
-                    bundle.putSerializable(LAUNCHER_LEGEND, legend)
+                        LegendResult.ActivityTransitionResource(this.getActivityKlass(), this.customAnimation)
                     resource.bundle = bundle
+
+                    CurrentLegendManager.sCurrentLegend = legend
                     executeActivityTransition(resource)
                 }
             }
             return
         }
-        executeFlow(legendKlass)
+        legendKlass?.apply {
+            executeLegend(legendKlass, bundle = bundle)
+        }
     }
 
-    fun <L : AndroidLegend> executeFlow(flowKlass: KClass<L>, vectorTag: String = AndroidLegend.ACTION_LAUNCH_FLOW, bundle: Bundle = Bundle()) {
-        val flow = registerFlow(flowKlass)
-        flow.execute(vectorTag, bundle)
-    }
-
-    fun getFlowData(): LiveData<FlowResource> = mFlowData
-
-    fun getFlowByName(flowName: String) = mFlowMap[flowName]
+    fun getLegendData(): LiveData<LegendResult> = mFlowData
 
     /**
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * ////////////////////////////////////// ON FLOW RESULT CONTROL ///////////////////////////////////////////////////
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     * /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     * LEGEND RESULT CONTROL
      */
 
-    final override fun onChanged(flowResource: FlowResource?) {
-        flowResource ?: return
-        when (flowResource) {
-            is FlowResource.FragmentTransitionResource<*> -> executeFragmentTransition(flowResource)
-            is FlowResource.ActivityTransitionResource<*> -> executeActivityTransition(flowResource)
-            is FlowResource.FragmentPopResource<*> -> executeFragmentPop(flowResource)
-            is FlowLauncher.FlowLauncherResource<*> -> launchLegend(legendKlass = flowResource.flowKlass /*,bundle = flowResource.bundle*/)
+    final override fun onChanged(legendResult: LegendResult?) {
+        legendResult ?: return
+        when (legendResult) {
+            is LegendResult.FragmentTransitionResource<*> -> executeFragmentTransition(legendResult)
+            is LegendResult.ActivityTransitionResource<*> -> executeActivityTransition(legendResult)
+            is LegendResult.FragmentPopResource<*> -> executeFragmentPop(legendResult)
+            is LegendStarter.LegendStarterResult<*> -> startLegend(legendKlass = legendResult.flowKlass)
+            is LegendResult.LambdaStarterResult -> executeStartLambda(legendResult.flowGraph)
+            is DialogOpener.DialogOpenerResult<*> -> executeOpenDialog(legendResult)
+            is DialogDismisser.DialogDismissResult<*> -> executeDismissDialog(legendResult)
             else -> {
-                if (flowResource.status == FlowResource.Status.COMPLETED) {
-                    notifyFlowStepCompleted(flowResource.bundle, flowResource.flowName)
+                if (legendResult.status == LegendResult.Status.COMPLETED) {
+                    notifyFlowStepCompleted(legendResult.bundle, legendResult.flowName)
                 }
             }
         }
     }
 
     /**
-     * Handle Flow Step Completed
+     * ON FLOW STEP COMPLETED
      */
 
     fun notifyFlowStepCompleted(bundle: Bundle, flowTag: String) {
@@ -157,7 +170,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
      * Handle Activity Destination in a Flow
      */
 
-    private fun executeActivityTransition(activityTransitionResource: FlowResource.ActivityTransitionResource<*>) {
+    private fun executeActivityTransition(activityTransitionResource: LegendResult.ActivityTransitionResource<*>) {
         val intent = Intent(this, activityTransitionResource.activityKlass.java)
         intent.putExtras(activityTransitionResource.bundle)
         startActivity(intent)
@@ -176,7 +189,7 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
     // TODO remove the need for illegal Argument Exception
 
     @SuppressLint("WrongConstant")
-    private fun executeFragmentTransition(fragmentTransitionResource: FlowResource.FragmentTransitionResource<*>) {
+    private fun executeFragmentTransition(fragmentTransitionResource: LegendResult.FragmentTransitionResource<*>) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -207,9 +220,25 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
             }
         }
 
-        val fragment = fragmentTransitionResource.fragmentKlass.primaryConstructor?.call() ?: return
+        val fragmentKlass = fragmentTransitionResource.fragmentKlass
+        val forceRecreate = fragmentTransitionResource.forceRecreate
+
+        /**
+         * Either create instance or find fragment by tag
+         */
+
+        val fragment = if (forceRecreate) {
+            fragmentKlass.constructors.first().call()
+        } else {
+            supportFragmentManager.findFragmentByTag(fragmentKlass.java.name) ?: fragmentKlass.constructors.first().call()
+        }
+
+        /**
+         * Commit fragment
+         */
+
         val bundle = fragmentTransitionResource.bundle
-        bundle.putString("TAG", fragmentTransitionResource.flowName)
+        bundle.putString(FRAGMENT_TRANSITION_BUNDLE, fragmentTransitionResource.flowName)
         // ADD FLOW STEP ARGUMENT
         fragment.arguments = bundle
         // BACK STACK CONTROL
@@ -218,16 +247,39 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<FlowResource> {
                 fragmentTransitionResource.fragmentKlass.java.name
             } else null
         )
-
         fragmentTransaction.replace(mFragmentContainerId, fragment).commit()
     }
 
-    private fun executeFragmentPop(fragmentPopResource: FlowResource.FragmentPopResource<*>) {
+    private fun executeFragmentPop(fragmentPopResource: LegendResult.FragmentPopResource<*>) {
         val fragmentManager = supportFragmentManager
         if (fragmentPopResource.fragmentKlass != null) {
 //            fragmentManager.popBackStack(fragmentPopResource.fragmentKlass.java.name)
         }
         fragmentManager.popBackStack()
         notifyFlowStepCompleted(fragmentPopResource.bundle, fragmentPopResource.flowName)
+    }
+
+    private fun executeStartLambda(flowGraph: AndroidLegend.FlowGraph, bundle: Bundle = Bundle()) {
+        val lambdaLegend = LambdaLegend(application, flowGraph)
+        processLegend<LambdaLegend>(lambdaLegend, bundle = bundle)
+    }
+
+    private fun executeOpenDialog(dialogOpenerResult: DialogOpener.DialogOpenerResult<*>) {
+        val legendsDialog = dialogOpenerResult.dialogKlass.constructors.first().call()
+        val bundle = dialogOpenerResult.bundle
+        bundle.putString(DIALOG_FRAGMENT_TRANSITION_BUNDLE, dialogOpenerResult.flowName)
+        legendsDialog.arguments = bundle
+        val transaction =  supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        legendsDialog.show(transaction, legendsDialog.javaClass.name)
+    }
+
+    private fun executeDismissDialog(dialogDismissResult: DialogDismisser.DialogDismissResult<*>) {
+        val legendsDialog = supportFragmentManager.findFragmentByTag(dialogDismissResult.dialogKlass.java.name)
+        when (legendsDialog) {
+            is LegendsDialogFragment -> {
+                legendsDialog.dismiss()
+            }
+        }
     }
 }

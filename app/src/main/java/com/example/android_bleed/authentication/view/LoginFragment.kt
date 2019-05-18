@@ -11,8 +11,9 @@ import androidx.lifecycle.Observer
 import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
+import com.example.android_bleed.authentication.AuthUtilities
 
 
 class LoginFragment : LegendsFragment() {
@@ -22,15 +23,6 @@ class LoginFragment : LegendsFragment() {
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getFlowData().observe(this, Observer {
-            when (it) {
-                is FlowResource.FailResource -> Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
-            }
-        })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +48,7 @@ class LoginFragment : LegendsFragment() {
             bundle.putString(User.EXTRA_USERNAME, etUsername.text.toString())
             bundle.putString(User.EXTRA_PASSWORD, etPassword.text.toString())
 
-            executeFlow(
+            executeLegend(
                 flowKlass = AuthenticationLegend::class,
                 vectorTag = AuthenticationLegend.ACTION_LOGIN,
                 bundle = bundle
@@ -64,7 +56,7 @@ class LoginFragment : LegendsFragment() {
         }
 
         btnRegister.setOnClickListener {
-            executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_REGISTER)
+            executeLegend(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_REGISTER)
         }
     }
 }

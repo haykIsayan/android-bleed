@@ -3,7 +3,7 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   tools:context="com.example.android_bleed.reminder.CreateReminderFragment">
+                                                   tools:context="com.example.android_bleed.editing.view.CreateReminderFragment">
 
     <LinearLayout
             android:orientation="vertical"
@@ -21,36 +21,32 @@
                 android:hint="Enter Reminder Message"
                 android:layout_gravity="center_horizontal"/>
 
-        <DatePicker
-                android:id="@+id/dp_reminder_time_fragment_create_reminder"
+        <Button
+                android:id="@+id/btn_date_fragment_create_reminder"
                 android:layout_width="320dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="60dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"
+                android:layout_margin="16dp"
+        />
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+        <Button
+                android:id="@+id/btn_time_fragment_create_reminder"
+                android:layout_width="320dp"
+                android:layout_height="60dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:layout_margin="16dp"
+        />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_save_reminder_create_reminder"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:weightSum="2">
-
-            <ImageButton
-                    android:id="@+id/ib_save_reminder_fragment_create_reminder"
-                    android:layout_weight="1"
-                    android:layout_margin="10dp"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:background="@android:color/holo_blue_light"
-                    android:src="@android:drawable/ic_menu_save"/>
-
-            <ImageButton
-                    android:id="@+id/ib_cancel_fragment_create_reminder"
-                    android:layout_weight="1"
-                    android:layout_margin="10dp"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:background="@android:color/holo_red_light"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"/>
-
-        </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@android:color/holo_orange_dark"
+                android:src="@android:drawable/ic_menu_save"
+                android:layout_margin="30dp"/>
 
     </LinearLayout>
 

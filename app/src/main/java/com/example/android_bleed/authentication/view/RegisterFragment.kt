@@ -13,7 +13,7 @@ import com.example.android_bleed.R
 import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.authentication.domain.RegisterAction
 import com.example.android_bleed.data.models.User
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
 
 
@@ -27,24 +27,6 @@ class RegisterFragment : LegendsFragment() {
 
     private lateinit var btnRegister: Button
     private lateinit var btnLogin: Button
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        getFlowData().observe(this, Observer {
-
-            when (it) {
-                is FlowResource.FailResource -> {
-                    Toast.makeText(activity, it.failMessage, Toast.LENGTH_SHORT).show()
-                }
-                is RegisterAction.RegisterFlowResource -> {
-                    Log.d("HAYK","COMPLETED")
-                    Toast.makeText(activity,"You have registered as" + it.bundle.getParcelable<User>(User.EXTRA_USER)?.userName, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +52,7 @@ class RegisterFragment : LegendsFragment() {
         }
 
         btnLogin.setOnClickListener {
-            executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_LOGIN)
+            executeLegend(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_GOTO_LOGIN)
         }
 
     }
@@ -96,7 +78,7 @@ class RegisterFragment : LegendsFragment() {
 
         val bundle = Bundle()
         bundle.putParcelable(User.EXTRA_USER, user)
-        executeFlow(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_REGISTER, bundle = bundle)
+        executeLegend(flowKlass = AuthenticationLegend::class, vectorTag = AuthenticationLegend.ACTION_REGISTER, bundle = bundle)
     }
 
 }

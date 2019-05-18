@@ -5,40 +5,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.data.repositories.UserRepository
-import com.example.android_bleed.android_legends.FlowResource
+import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.flowsteps.UserAction
 
 class RegisterAction : UserAction.UserApplicationAction() {
-    override fun execute(application: Application): LiveData<FlowResource> {
+    override fun execute(application: Application): LiveData<LegendResult> {
 
-        val data = MutableLiveData<FlowResource>()
+        val data = MutableLiveData<LegendResult>()
         val thread = Thread(Runnable {
 
             val repository = UserRepository(application)
             val user = dataBundle.getParcelable<User>(User.EXTRA_USER)
 
             if (user == null) {
-                data.postValue(FlowResource.FailResource("A user was not provided"))
+                data.postValue(LegendResult.FailResult("A user was not provided"))
                 return@Runnable
             }
 
             repository.registerUser(user = user)
 
-            val registerResource = RegisterFlowResource(FlowResource.Status.COMPLETED)
-            registerResource.bundle.putParcelable(User.EXTRA_USER, user)
+            val registerResult = RegisterResult(user)
+            registerResult.bundle.putParcelable(User.EXTRA_USER, user)
 
-            data.postValue(registerResource)
+            data.postValue(registerResult)
 
         })
         thread.start()
         return data
     }
 
-    class RegisterFlowResource(status: Status) : FlowResource(status) {
-
-    }
-
-
-
+    data class RegisterResult(val user: User) : LegendResult(Status.COMPLETED)
 
 }
