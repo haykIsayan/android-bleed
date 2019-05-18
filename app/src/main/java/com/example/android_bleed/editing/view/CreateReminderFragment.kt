@@ -2,6 +2,7 @@ package com.example.android_bleed.editing.view
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,14 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val editingActivity = (activity as EditingActivity)
+        editingActivity.supportActionBar?.title = "Create a reminder"
+        editingActivity.supportActionBar?.setIcon(R.drawable.ic_action_reminder)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            editingActivity.supportActionBar?.setBackgroundDrawable(editingActivity.getDrawable(R.drawable.rounded_bg_orange_v2))
+        }
+
         etReminderMessage = view.findViewById(R.id.et_reminder_message_fragment_create_reminder)
         btnSelectedDate = view.findViewById(R.id.btn_date_fragment_create_reminder)
         btnSelectedTime = view.findViewById(R.id.btn_time_fragment_create_reminder)
@@ -74,8 +83,9 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
     }
 
     private fun setCurrentTime() {
-        btnSelectedDate.text = DateFormat.getInstance().format(mCalendar.time)
-        btnSelectedTime.text = DateFormat.getInstance().format(mCalendar.time)
+        btnSelectedDate.text = DateFormat.getDateInstance(DateFormat.LONG).format(mCalendar.time)
+        val date = DateFormat.getInstance().format(mCalendar.time).split(" ")
+        btnSelectedTime.text = "${date[1]} ${date[2]}"
     }
 
     private fun openDatePicker() {
@@ -104,7 +114,7 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
             null,
             etReminderMessage.text.toString(),
             btnSelectedDate.text.toString(),
-            "",
+            btnSelectedTime.text.toString(),
             user.userName,
             mCalendar.timeInMillis
         )

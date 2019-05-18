@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.Reminder
 
-class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
+class ReminderAdapter(val reminderClickListener: ReminderClickListener) : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
 
     private val mReminderList: ArrayList<Reminder> = ArrayList()
 
@@ -22,6 +22,9 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         holder.bind(mReminderList[position])
+        holder.itemView.setOnClickListener {
+            reminderClickListener.onReminderClick(mReminderList[position])
+        }
     }
 
     fun setReminderList(reminderList: List<Reminder>) {
@@ -33,10 +36,21 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
     class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvReminderMessage: TextView = itemView.findViewById(R.id.tv_reminder_message_item_reminder)
         private val tvReminderDate: TextView = itemView.findViewById(R.id.tv_reminder_date_item_reminder)
+        private val tvReminderTime: TextView = itemView.findViewById(R.id.tv_reminder_time_item_reminder)
 
         fun bind(reminder: Reminder) {
-            tvReminderMessage.text = reminder.reminderMessage
+
+            if (!reminder.reminderMessage.isEmpty()) {
+                tvReminderMessage.text = reminder.reminderMessage
+            }
             tvReminderDate.text = reminder.reminderDate
+            tvReminderTime.text = reminder.reminderTime
+
+
         }
+    }
+
+    interface ReminderClickListener {
+        fun onReminderClick(reminder: Reminder)
     }
 }

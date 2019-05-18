@@ -1,13 +1,18 @@
 package com.example.android_bleed.main
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.authentication.AuthUtilities
+import com.example.android_bleed.authentication.AuthenticationLegend
+import com.example.android_bleed.editing.CreateLegend
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : LegendsActivity() {
 
@@ -17,6 +22,7 @@ class MainActivity : LegendsActivity() {
 
     private var mCurrentUser: User? = null
 
+    private lateinit var fabAddButton: FloatingActionButton
     private lateinit var bnvMainNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +33,17 @@ class MainActivity : LegendsActivity() {
 
         supportActionBar?.apply {
             this.title = AuthUtilities.sCurrentUser?.userName
-            elevation = 15F
-            this.setLogo(R.mipmap.baseline_edit_white_18dp)
+            setIcon(R.drawable.ic_action_legend)
         }
 
-        this.bnvMainNavigation = this.findViewById(R.id.bnv_nav_view_activity_main)
+        this.fabAddButton = this.findViewById(R.id.fab_add_activity_main)
+        this.bnvMainNavigation = this.findViewById(R.id.bab_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
+
+        fabAddButton.setOnClickListener {
+            val id = bnvMainNavigation.selectedItemId
+            executeLegend(CreateLegend::class, id.toString())
+        }
 
 
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
@@ -40,8 +51,19 @@ class MainActivity : LegendsActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main_action_bar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        startLogOutDialog()
+        return super.onOptionsItemSelected(item)
+    }
+
     fun setSubTitle(subtitle: String) {
-        supportActionBar?.subtitle = subtitle
+//        supportActionBar?.subtitle = subtitle
     }
 
     fun selectBottomNavigation(@IdRes menuItemId: Int) {
@@ -62,6 +84,18 @@ class MainActivity : LegendsActivity() {
             bundle = bundle
         )
         return true
+    }
+
+    private fun startLogOutDialog() {
+        AlertDialog.Builder(this)
+            .setPositiveButton("Log out") {dialog, which ->
+                startLegend(AuthenticationLegend::class)
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+                // dismiss dialog
+            }
+            .setTitle("Do you want to log out?")
+            .show()
     }
 
 }

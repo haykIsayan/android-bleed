@@ -16,13 +16,12 @@
                 android:id="@+id/tb_action_bar_activity_main"
                 android:background="@color/colorPrimary"
                 app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/SettingsTheme"
+                app:title="Android Legends"
                 app:titleTextColor="@android:color/white"
-                app:title="asdfasdf"
-                app:subtitleTextColor="@android:color/white"
-                app:titleMargin="10dp"
-                app:subtitle="asdfa"
+                app:titleMarginStart="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="?attr/actionBarSize"/>
 
         <FrameLayout
                 android:id="@+id/fl_main_container_activity_main"
@@ -34,16 +33,28 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bnv_nav_view_activity_main"
+            android:id="@+id/bab_nav_view_activity_main"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorPrimaryDark"
             app:menu="@menu/menu_main_bottom_nav"
             app:itemIconTint="@android:color/white"
             app:itemTextColor="@android:color/white"
-            android:foregroundGravity="top"
             app:labelVisibilityMode="selected"
             android:defaultFocusHighlightEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_activity_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="@android:color/white"
+            android:src="@mipmap/baseline_gamepad_black_24dp"
+            app:elevation="10dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,11 +22,9 @@ class CreateNoteFragment : LegendsFragment() {
 
     override fun getLayoutResource(): Int = R.layout.fragment_create_note
 
-
     private lateinit var etNoteTitle: EditText
     private lateinit var etNoteText: EditText
     private lateinit var fabSaveNote: FloatingActionButton
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +37,13 @@ class CreateNoteFragment : LegendsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val editingActivity = (activity as EditingActivity)
+        editingActivity.supportActionBar?.title = "Create a note"
+        editingActivity.supportActionBar?.setIcon(R.drawable.ic_action_note)
+
         this.etNoteTitle = view.findViewById(R.id.et_note_title_fragment_create_note)
         this.etNoteText = view.findViewById(R.id.et_note_text_fragment_create_note)
         this.fabSaveNote = view.findViewById(R.id.fab_save_note_fragment_create_note)
-
-
-
-
 
         this.fabSaveNote.setOnClickListener {
             AuthUtilities.sCurrentUser?.apply {
@@ -69,7 +67,7 @@ class CreateNoteFragment : LegendsFragment() {
             authorUsername = user.userName,
             title = etNoteTitle.text.toString(),
             text = etNoteText.text.toString(),
-            date = DateFormat.getInstance().format(Calendar.getInstance().time).split(" ")[0]
+            date = DateFormat.getDateInstance(DateFormat.LONG).format(Calendar.getInstance().time)
         )
 
         val bundle = Bundle()

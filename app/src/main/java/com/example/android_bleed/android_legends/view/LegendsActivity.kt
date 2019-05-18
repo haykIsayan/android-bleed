@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
@@ -21,7 +21,6 @@ import com.example.android_bleed.android_legends.utilities.CurrentLegendManager
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
 
@@ -32,10 +31,10 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
     private var mFragmentContainerId: Int = -1
 
     companion object {
+        const val RECEIVER_LEGEND_BUNDLE = "Starter.Legend.Bundle"
         const val FRAGMENT_TRANSITION_BUNDLE = "Fragment.Transition.Bundle"
         const val DIALOG_FRAGMENT_TRANSITION_BUNDLE = "Dialog.Fragment.Transition.Bundle"
     }
-
     protected abstract fun getFragmentContainerId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,11 +56,26 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
     private fun registerLauncherLegend() {
         val bundle = intent.extras
 
-        val starterLegend = CurrentLegendManager.sCurrentLegend
-        starterLegend?.apply {
-            registerLegend(legend = starterLegend)
-            starterLegend.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
+        // CHECK IF IS FROM RECEIVER
+
+        var receiverLegend = bundle?.getSerializable(RECEIVER_LEGEND_BUNDLE) as AndroidLegend?
+
+        receiverLegend?.apply {
+            receiverLegend = initAndroidLegend(this::class)
+            registerLegend(receiverLegend!!)
+            receiverLegend?.execute(AndroidLegend.ACTION_START_LEGEND, bundle)
+            return
         }
+
+        // not from receiver
+
+        var starterLegend = CurrentLegendManager.sCurrentLegend
+        starterLegend?.apply {
+            registerLegend(legend = starterLegend!!)
+            starterLegend!!.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
+            return
+        }
+
     }
 
     private fun <L : AndroidLegend> initAndroidLegend(flowKlass: KClass<L>) = flowKlass.constructors.first().call(application)
