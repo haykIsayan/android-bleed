@@ -20,21 +20,14 @@ class MainLegend (application: Application) : AndroidLegend(application) {
             .addFlowVector(
                 ACTION_OPEN_NOTE_LIST,
                 FlowVector()
-                    .transitionTo(NoteListFragment::class, false)
+                    .transitionTo(NoteListFragment::class, false, fragmentAnimation = SlideLeftAnimation())
                     .execute(GetNoteListAction())
             )
 
             .addFlowVector(
                 ACTION_OPEN_REMINDER_LIST,
                 FlowVector()
-                    .transitionTo(ReminderListFragment::class, false)
-                    .execute(GetReminderListAction())
-            )
-
-            .addFlowVector(
-                ACTION_OPEN_PROFILE,
-                FlowVector()
-                    .transitionTo(SettingsFragment::class, false)
+                    .transitionTo(ReminderListFragment::class, false, fragmentAnimation = SlideRightAnimation())
                     .execute(GetReminderListAction())
             )
     }
@@ -42,6 +35,5 @@ class MainLegend (application: Application) : AndroidLegend(application) {
     companion object {
         const val ACTION_OPEN_NOTE_LIST = "My Notes"
         const val ACTION_OPEN_REMINDER_LIST = "My Reminders"
-        const val ACTION_OPEN_PROFILE = "Profile"
     }
 }
