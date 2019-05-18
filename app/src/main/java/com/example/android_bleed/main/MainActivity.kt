@@ -1,12 +1,15 @@
 package com.example.android_bleed.main
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.authentication.AuthUtilities
+import com.example.android_bleed.authentication.AuthenticationLegend
 import com.example.android_bleed.editing.CreateLegend
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,9 +32,7 @@ class MainActivity : LegendsActivity() {
         setSupportActionBar(findViewById(R.id.tb_action_bar_activity_main))
 
         supportActionBar?.apply {
-            this.title = AuthUtilities.sCurrentUser?.userName
-            elevation = 15F
-            this.setLogo(R.mipmap.baseline_edit_white_18dp)
+            this.title = "Welcome ${AuthUtilities.sCurrentUser?.userName}"
         }
 
         this.fabAddButton = findViewById(R.id.fab_add_activity_main)
@@ -47,6 +48,18 @@ class MainActivity : LegendsActivity() {
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
             onNavigationItemSelected(menuItem = it)
         }
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main_action_bar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        startLogOutDialog()
+        return super.onOptionsItemSelected(item)
     }
 
     fun setSubTitle(subtitle: String) {
@@ -71,6 +84,18 @@ class MainActivity : LegendsActivity() {
             bundle = bundle
         )
         return true
+    }
+
+    private fun startLogOutDialog() {
+        AlertDialog.Builder(this)
+            .setPositiveButton("Log out") {dialog, which ->
+                startLegend(AuthenticationLegend::class)
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+                // dismiss dialog
+            }
+            .setTitle("Do you want to log out?")
+            .show()
     }
 
 }

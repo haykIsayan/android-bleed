@@ -16,13 +16,13 @@
                 android:id="@+id/tb_action_bar_activity_main"
                 android:background="@color/colorPrimary"
                 app:layout_constraintTop_toTopOf="parent"
-                app:titleTextColor="@android:color/white"
-                app:title="asdfasdf"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/SettingsTheme"
+                app:title="Android Legends"
                 app:subtitleTextColor="@android:color/white"
-                app:titleMargin="10dp"
-                app:subtitle="asdfa"
+                app:subtitle="My Items"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="?attr/actionBarSize"/>
 
         <FrameLayout
                 android:id="@+id/fl_main_container_activity_main"
