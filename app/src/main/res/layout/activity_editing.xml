@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context="com.example.android_bleed.editing.view.EditingActivity">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_action_bar_activity_editing"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/SettingsTheme"
+            app:title="Android Legends"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
 
     <FrameLayout
             android:id="@+id/fl_container_activity_editing"
-            android:layout_width="match_parent" android:layout_height="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -39,13 +39,12 @@ class CreateNoteFragment : LegendsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val editingActivity = (activity as EditingActivity)
+        editingActivity.supportActionBar?.title = "Create a note"
+
         this.etNoteTitle = view.findViewById(R.id.et_note_title_fragment_create_note)
         this.etNoteText = view.findViewById(R.id.et_note_text_fragment_create_note)
         this.fabSaveNote = view.findViewById(R.id.fab_save_note_fragment_create_note)
-
-
-
-
 
         this.fabSaveNote.setOnClickListener {
             AuthUtilities.sCurrentUser?.apply {

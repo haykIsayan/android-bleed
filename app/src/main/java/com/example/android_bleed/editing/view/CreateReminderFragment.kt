@@ -2,6 +2,7 @@ package com.example.android_bleed.editing.view
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +47,12 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val editingActivity = (activity as EditingActivity)
+        editingActivity.supportActionBar?.title = "Create a reminder"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            editingActivity.supportActionBar?.setBackgroundDrawable(editingActivity.getDrawable(R.drawable.rounded_bg_orange_v2))
+        }
 
         etReminderMessage = view.findViewById(R.id.et_reminder_message_fragment_create_reminder)
         btnSelectedDate = view.findViewById(R.id.btn_date_fragment_create_reminder)
