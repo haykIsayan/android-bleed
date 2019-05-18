@@ -63,8 +63,6 @@ class ReminderListFragment : LegendsFragment() {
         llEmptyState = view.findViewById(R.id.ll_empty_view_fragment_reminder_list)
         rvReminderList = view.findViewById(R.id.rv_reminder_list_fragment_reminder_list)
 
-        // SETUP RECYCLER VIEW
-        rvReminderList.addItemDecoration(DividerItemDecoration(activity, RecyclerView.VERTICAL))
         rvReminderList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         rvReminderList.adapter = mReminderAdapter
     }

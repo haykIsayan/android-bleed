@@ -16,11 +16,10 @@
                 android:id="@+id/tb_action_bar_activity_main"
                 android:background="@color/colorPrimary"
                 app:layout_constraintTop_toTopOf="parent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/SettingsTheme"
                 app:title="Android Legends"
-                app:subtitleTextColor="@android:color/white"
-                app:subtitle="My Items"
+                app:titleTextColor="@android:color/white"
+                app:titleMarginStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"/>
 

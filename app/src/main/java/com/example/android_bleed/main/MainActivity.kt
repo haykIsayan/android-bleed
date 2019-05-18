@@ -32,10 +32,11 @@ class MainActivity : LegendsActivity() {
         setSupportActionBar(findViewById(R.id.tb_action_bar_activity_main))
 
         supportActionBar?.apply {
-            this.title = "Welcome ${AuthUtilities.sCurrentUser?.userName}"
+            this.title = AuthUtilities.sCurrentUser?.userName
+            setIcon(R.drawable.ic_action_legend)
         }
 
-        this.fabAddButton = findViewById(R.id.fab_add_activity_main)
+        this.fabAddButton = this.findViewById(R.id.fab_add_activity_main)
         this.bnvMainNavigation = this.findViewById(R.id.bab_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
 
@@ -50,7 +51,6 @@ class MainActivity : LegendsActivity() {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_main_action_bar, menu)
@@ -63,7 +63,7 @@ class MainActivity : LegendsActivity() {
     }
 
     fun setSubTitle(subtitle: String) {
-        supportActionBar?.subtitle = subtitle
+//        supportActionBar?.subtitle = subtitle
     }
 
     fun selectBottomNavigation(@IdRes menuItemId: Int) {

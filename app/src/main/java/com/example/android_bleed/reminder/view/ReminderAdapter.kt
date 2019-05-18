@@ -33,10 +33,15 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
     class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvReminderMessage: TextView = itemView.findViewById(R.id.tv_reminder_message_item_reminder)
         private val tvReminderDate: TextView = itemView.findViewById(R.id.tv_reminder_date_item_reminder)
+        private val tvReminderTime: TextView = itemView.findViewById(R.id.tv_reminder_time_item_reminder)
 
         fun bind(reminder: Reminder) {
-            tvReminderMessage.text = reminder.reminderMessage
-            tvReminderDate.text = reminder.reminderDate
+
+            if (!reminder.reminderMessage.isEmpty()) {
+                tvReminderMessage.text = reminder.reminderMessage
+            }
+            tvReminderDate.text = reminder.reminderDate.split(" ")[0]
+            tvReminderTime.text = reminder.reminderDate.split(" ")[1]
         }
     }
 }

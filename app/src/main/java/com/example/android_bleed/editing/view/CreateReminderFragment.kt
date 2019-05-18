@@ -50,6 +50,8 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
 
         val editingActivity = (activity as EditingActivity)
         editingActivity.supportActionBar?.title = "Create a reminder"
+        editingActivity.supportActionBar?.setIcon(R.drawable.ic_action_reminder)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             editingActivity.supportActionBar?.setBackgroundDrawable(editingActivity.getDrawable(R.drawable.rounded_bg_orange_v2))
         }
