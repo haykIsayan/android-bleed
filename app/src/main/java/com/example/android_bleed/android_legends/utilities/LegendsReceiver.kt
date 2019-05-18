@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.android_bleed.android_legends.flowsteps.ActivityDestination
 import com.example.android_bleed.android_legends.legends.AndroidLegend
-import com.example.android_bleed.android_legends.legends.LambdaLegend
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import kotlin.reflect.KClass
 
@@ -21,9 +20,9 @@ abstract class LegendsReceiver : BroadcastReceiver() {
             when (this) {
                 is ActivityDestination<*> -> {
                     val intent = Intent(application, this.getActivityKlass().java)
-                    bundle.putSerializable(LegendsActivity.STARTER_LEGEND_BUNDLE, legend)
+                    bundle.putSerializable(LegendsActivity.RECEIVER_LEGEND_BUNDLE, legend)
+                    bundle.putBoolean("IS_FROM_RECEIVER", true)
                     intent.putExtras(bundle)
-                    CurrentLegendManager.sCurrentLegend = legend
                     return intent
                 }
             }

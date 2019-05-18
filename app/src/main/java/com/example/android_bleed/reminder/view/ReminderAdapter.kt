@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.data.models.Reminder
 
-class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
+class ReminderAdapter(val reminderClickListener: ReminderClickListener) : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
 
     private val mReminderList: ArrayList<Reminder> = ArrayList()
 
@@ -22,6 +22,9 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         holder.bind(mReminderList[position])
+        holder.itemView.setOnClickListener {
+            reminderClickListener.onReminderClick(mReminderList[position])
+        }
     }
 
     fun setReminderList(reminderList: List<Reminder>) {
@@ -42,6 +45,12 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
             }
             tvReminderDate.text = reminder.reminderDate
             tvReminderTime.text = reminder.reminderTime
+
+
         }
+    }
+
+    interface ReminderClickListener {
+        fun onReminderClick(reminder: Reminder)
     }
 }

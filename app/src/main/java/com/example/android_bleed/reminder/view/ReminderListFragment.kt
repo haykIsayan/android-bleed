@@ -13,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_bleed.R
 import com.example.android_bleed.android_legends.utilities.LegendResult
 import com.example.android_bleed.android_legends.view.LegendsFragment
+import com.example.android_bleed.data.models.Reminder
 import com.example.android_bleed.editing.CreateReminderLegend
 import com.example.android_bleed.main.MainActivity
+import com.example.android_bleed.reminder.ReminderPreviewLegend
 import com.example.android_bleed.reminder.domain.GetReminderListAction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-class ReminderListFragment : LegendsFragment() {
+class ReminderListFragment : LegendsFragment(), ReminderAdapter.ReminderClickListener {
+
     override fun getLayoutResource(): Int = R.layout.fragment_reminder_list
 
     private lateinit var llEmptyState: LinearLayout
@@ -30,7 +33,7 @@ class ReminderListFragment : LegendsFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mReminderAdapter = ReminderAdapter()
+        mReminderAdapter = ReminderAdapter(this)
 
         getLegendData().observe(this, Observer {
             when (it) {
@@ -65,5 +68,11 @@ class ReminderListFragment : LegendsFragment() {
 
         rvReminderList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         rvReminderList.adapter = mReminderAdapter
+    }
+
+    override fun onReminderClick(reminder: Reminder) {
+        val bundle = Bundle()
+        bundle.putParcelable(Reminder.EXTRA_REMINDER, reminder)
+        startLegend(ReminderPreviewLegend::class, bundle)
     }
 }
