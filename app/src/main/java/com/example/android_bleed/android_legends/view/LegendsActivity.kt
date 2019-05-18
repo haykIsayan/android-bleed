@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -32,10 +34,10 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
     private var mFragmentContainerId: Int = -1
 
     companion object {
+        const val STARTER_LEGEND_BUNDLE = "Starter.Legend.Bundle"
         const val FRAGMENT_TRANSITION_BUNDLE = "Fragment.Transition.Bundle"
         const val DIALOG_FRAGMENT_TRANSITION_BUNDLE = "Dialog.Fragment.Transition.Bundle"
     }
-
     protected abstract fun getFragmentContainerId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,10 +59,28 @@ abstract class LegendsActivity : AppCompatActivity(), Observer<LegendResult> {
     private fun registerLauncherLegend() {
         val bundle = intent.extras
 
-        val starterLegend = CurrentLegendManager.sCurrentLegend
+        var starterLegend = CurrentLegendManager.sCurrentLegend
         starterLegend?.apply {
-            registerLegend(legend = starterLegend)
-            starterLegend.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
+            registerLegend(legend = starterLegend!!)
+            starterLegend!!.execute(AndroidLegend.ACTION_START_LEGEND, bundle ?: Bundle())
+
+            
+
+            return
+        }
+
+        ////////////////////////////
+
+        starterLegend = bundle?.getSerializable(STARTER_LEGEND_BUNDLE) as AndroidLegend?
+
+        starterLegend?.apply {
+
+            Toast.makeText(this@LegendsActivity, starterLegend!!::class.java.name,Toast.LENGTH_LONG).show()
+
+
+            starterLegend = initAndroidLegend(this::class)
+            registerLegend(starterLegend!!)
+            starterLegend?.execute(AndroidLegend.ACTION_START_LEGEND, bundle)
         }
     }
 

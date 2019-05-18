@@ -40,8 +40,8 @@ class ReminderAdapter : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>
             if (!reminder.reminderMessage.isEmpty()) {
                 tvReminderMessage.text = reminder.reminderMessage
             }
-            tvReminderDate.text = reminder.reminderDate.split(" ")[0]
-            tvReminderTime.text = reminder.reminderDate.split(" ")[1]
+            tvReminderDate.text = reminder.reminderDate
+            tvReminderTime.text = reminder.reminderTime
         }
     }
 }

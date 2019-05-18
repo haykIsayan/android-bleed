@@ -83,8 +83,9 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
     }
 
     private fun setCurrentTime() {
-        btnSelectedDate.text = DateFormat.getInstance().format(mCalendar.time)
-        btnSelectedTime.text = DateFormat.getInstance().format(mCalendar.time)
+        btnSelectedDate.text = DateFormat.getDateInstance(DateFormat.LONG).format(mCalendar.time)
+        val date = DateFormat.getInstance().format(mCalendar.time).split(" ")
+        btnSelectedTime.text = "${date[1]} ${date[2]}"
     }
 
     private fun openDatePicker() {
@@ -113,7 +114,7 @@ class CreateReminderFragment : LegendsFragment(), TimePickerDialog.OnTimeSetList
             null,
             etReminderMessage.text.toString(),
             btnSelectedDate.text.toString(),
-            "",
+            btnSelectedTime.text.toString(),
             user.userName,
             mCalendar.timeInMillis
         )
