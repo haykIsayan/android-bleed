@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,8 +22,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class ReminderListFragment : LegendsFragment() {
     override fun getLayoutResource(): Int = R.layout.fragment_reminder_list
 
+    private lateinit var llEmptyState: LinearLayout
     private lateinit var rvReminderList: RecyclerView
-    private lateinit var fabAddReminder: FloatingActionButton
 
     private lateinit var mReminderAdapter: ReminderAdapter
 
@@ -34,25 +35,19 @@ class ReminderListFragment : LegendsFragment() {
         getLegendData().observe(this, Observer {
             when (it) {
                 is GetReminderListAction.GetRemindersResult -> {
-                    Toast.makeText(activity, "${it.reminderList.size}", Toast.LENGTH_LONG).show()
+                    llEmptyState.visibility = View.GONE
                     mReminderAdapter.setReminderList(it.reminderList)
                 }
                 is LegendResult.FailResult -> {
-                    Toast.makeText(activity, it.failMessage, Toast.LENGTH_LONG).show()
+                    llEmptyState.visibility = View.VISIBLE
                 }
             }
         })
 
+        val mainActivity = (activity as MainActivity)
 
-        activity?.actionBar?.apply {
-            subtitle = "My Reminders"
-        }
-
-
-
-
-        (activity as MainActivity).selectBottomNavigation(R.id.menu_reminder_list)
-
+        mainActivity.selectBottomNavigation(R.id.menu_reminder_list)
+        mainActivity.setSubTitle("My Reminders")
     }
 
     override fun onCreateView(
@@ -65,17 +60,12 @@ class ReminderListFragment : LegendsFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        llEmptyState = view.findViewById(R.id.ll_empty_view_fragment_reminder_list)
         rvReminderList = view.findViewById(R.id.rv_reminder_list_fragment_reminder_list)
-        fabAddReminder = view.findViewById(R.id.fab_add_reminder_fragment_reminder_list)
 
         // SETUP RECYCLER VIEW
         rvReminderList.addItemDecoration(DividerItemDecoration(activity, RecyclerView.VERTICAL))
         rvReminderList.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         rvReminderList.adapter = mReminderAdapter
-
-        // SETUP CLICK LISTENER
-        fabAddReminder.setOnClickListener {
-            startLegend(CreateReminderLegend::class)
-        }
     }
 }

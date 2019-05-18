@@ -7,7 +7,9 @@ import com.example.android_bleed.R
 import com.example.android_bleed.data.models.User
 import com.example.android_bleed.android_legends.view.LegendsActivity
 import com.example.android_bleed.authentication.AuthUtilities
+import com.example.android_bleed.editing.CreateLegend
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : LegendsActivity() {
 
@@ -17,6 +19,7 @@ class MainActivity : LegendsActivity() {
 
     private var mCurrentUser: User? = null
 
+    private lateinit var fabAddButton: FloatingActionButton
     private lateinit var bnvMainNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +34,14 @@ class MainActivity : LegendsActivity() {
             this.setLogo(R.mipmap.baseline_edit_white_18dp)
         }
 
-        this.bnvMainNavigation = this.findViewById(R.id.bnv_nav_view_activity_main)
+        this.fabAddButton = findViewById(R.id.fab_add_activity_main)
+        this.bnvMainNavigation = this.findViewById(R.id.bab_nav_view_activity_main)
         this.mCurrentUser = intent.getParcelableExtra(User.EXTRA_USER)
+
+        fabAddButton.setOnClickListener {
+            val id = bnvMainNavigation.selectedItemId
+            executeLegend(CreateLegend::class, id.toString())
+        }
 
 
         this.bnvMainNavigation.setOnNavigationItemSelectedListener {
